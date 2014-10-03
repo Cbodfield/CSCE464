@@ -1,0 +1,34 @@
+package classes;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.ResultSet;
+
+public class ExecuteDatabaseCall {
+	
+	public ArrayList<Object> getSearchResults(){
+		JDBCHelper jdbc = new JDBCHelper();
+		ArrayList<Object> param =  new ArrayList<Object>();
+		ArrayList<ArrayList<Object>> results =  new ArrayList<ArrayList<Object>>();
+		
+		
+		param.add(35767);
+		ResultSet rs1 = jdbc.queryDB("TODO", param);
+
+		try {
+			if (rs1 != null){
+				while (rs1.next()){
+					
+				}
+			}
+			jdbc.conn.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return null;		
+	}
+	
+}

@@ -11,15 +11,19 @@ import java.util.ArrayList;
 public class JDBCHelper {
 	
 	public Connection conn;
+	public PreparedStatement ps;
+	public ResultSet rs;
 
 	public JDBCHelper(){
 		this.conn = this.initiateConnection("cse.unl.edu", "cbodfie", "cbodfie", "hr8Kc3");
+		this.ps = null;
+		this.rs = null;
 	}
 
-/*	*//***
+	/***
 	 * Make sure to close your connection!!!
-	 *//*
-	private static void example() {
+	 */
+/*	private static void example() {
 		JDBCHelper jdbc = new JDBCHelper();
 		ArrayList<Object> param =  new ArrayList<Object>();
 		*//**
@@ -81,35 +85,49 @@ public class JDBCHelper {
 	 * @return A resultset if the query is successful, else null
 	 */
 	public <T> ResultSet queryDB(String query, ArrayList<T> sqlParam){
-		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try{
-			ps = conn.prepareStatement(query);
+			this.ps = conn.prepareStatement(query);
 
 			int i = 1;
 			for (T a : sqlParam){
 				//System.out.println(a.getClass());
 				if (a.getClass() == String.class){
-					ps.setString(i, (String)a);
+					this.ps.setString(i, (String)a);
 					//System.out.println(String.format("I'm a String!  %d - %s", i, (String) a));
 				}else if(a.getClass() == Integer.class){
-					ps.setInt(i, (Integer)a);
+					this.ps.setInt(i, (Integer)a);
 					//System.out.println(String.format("I'm an Integer!  %d - %d", i, (Integer) a));
 				}else if(a.getClass() == Double.class){
-					ps.setDouble(i, (Double)a);
+					this.ps.setDouble(i, (Double)a);
 					//System.out.println(String.format("I'm a Double!  %d - %f", i, (Double) a));
 				}else if (a.getClass() == Timestamp.class){
-					ps.setTimestamp(i, (Timestamp)a);
+					this.ps.setTimestamp(i, (Timestamp)a);
 					//System.out.println(String.format("I'm a DateTime!  %d - %s", i, a.toString()));
 				}
 				i++;
 			}
-			rs = ps.executeQuery();
+			this.rs = this.ps.executeQuery();
 		}catch (SQLException e){
 			e.printStackTrace();
 			return null;
 		}
-		return rs;
+		return this.rs;
+	}
+	
+	public void closeConnection(){
+		try {
+			if(this.rs != null && !this.rs.isClosed())
+				this.rs.close();
+			if(this.ps != null && !this.ps.isClosed())
+				this.ps.close();
+			if(this.conn != null && !this.conn.isClosed())
+				this.conn.close();
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		
 	}
 
 }
