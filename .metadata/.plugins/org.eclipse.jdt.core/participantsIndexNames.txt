@@ -1,3 +1,5 @@
 INDEX VERSION 1.126
+D:\Github\CSCE464\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3255709627.index
+\Team01-HW2\src
 D:\Github\CSCE464\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3046178123.index
 \Team01-HW1\src
