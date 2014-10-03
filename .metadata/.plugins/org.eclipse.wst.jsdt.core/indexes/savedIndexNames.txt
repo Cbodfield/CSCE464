@@ -2,7 +2,6 @@ INDEX VERSION 1.3+D:\Github\CSCE464\.metadata\.plugins\org.eclipse.wst.jsdt.core
 4140840855.index
 3744970308.index
 3939651952.index
-3255709627.index
 3234805445.index
 3453498793.index
 1987100816.index
