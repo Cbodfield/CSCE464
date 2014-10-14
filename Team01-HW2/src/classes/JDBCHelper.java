@@ -9,52 +9,52 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class JDBCHelper {
-	
-	public Connection conn;
-	public PreparedStatement ps;
-	public ResultSet rs;
+	private Connection conn;
+	private PreparedStatement ps;
+	private ResultSet rs;
 
+	/**
+	 * Before making a database call, call either connectToCSE464DB() or connectToTeamDB() to initiate the connection. 
+	 * Be sure to call closeConnection() when finished.
+	 */	
 	public JDBCHelper(){
-		this.conn = this.initiateConnection("cse.unl.edu", "cbodfie", "cbodfie", "hr8Kc3");
+		this.conn = null;
 		this.ps = null;
 		this.rs = null;
 	}
-
-	/***
-	 * Make sure to close your connection!!!
+	
+	/**
+	 * Connects to the CSE464 database
+	 * @return true when connection was successful
 	 */
-/*	private static void example() {
-		JDBCHelper jdbc = new JDBCHelper();
-		ArrayList<Object> param =  new ArrayList<Object>();
-		*//**
-		param.add("Hello");
-		param.add(35767);
-		param.add(4.0);
-		param.add(Timestamp.valueOf("2014-09-30 11:41:00"));
-		 *//*
-		param.add(35767);
-		ResultSet rs1 = jdbc.queryDB("SELECT flights.arrival AS arrival FROM flights JOIN planes ON flights.flightnumber=planes.id WHERE planes.flightnumber=?", param);
-
-		try {
-			if (rs1 != null){
-				while (rs1.next()){
-					System.out.println(rs1.getTimestamp("arrival"));
-				}
-			}
-			jdbc.conn.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+	public boolean connectToCSE464DB(){
+		this.conn = this.initiateConnection("cse.unl.edu", "cse464", "cbodfie", "hr8Kc3"); //TODO - figure out credentials to the db
+		if (this.conn.equals(null)){
+			return false;
+		}else{
+			return true;
 		}
-	}*/
-
+	}
+	
+	/**
+	 * Connects to the Team01 database
+	 * @return true when connection was successful
+	 */
+	public boolean connectToTeamDB(){
+		this.conn = this.initiateConnection("cse.unl.edu", "cbodfie", "cbodfie", "hr8Kc3");
+		if (this.conn.equals(null)){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
 
 	/**
 	 * This class loads the MySQL Driver and Connects to the entered database.
 	 * @return A live connection or null
 	 */
-	public Connection initiateConnection(String host, String db, String user, String password){
-
+	private Connection initiateConnection(String host, String db, String user, String password){
 		Connection dbConnection = null;
 
 		try{
@@ -63,7 +63,6 @@ public class JDBCHelper {
 		}catch(Exception x){
 			System.out.println("Unable to load the driver class");
 		}
-
 
 		try{
 			String connString = String.format("jdbc:mysql://%s:3306/%s?user=%s&password=%s", host, db, user, password);
@@ -114,6 +113,9 @@ public class JDBCHelper {
 		return this.rs;
 	}
 	
+	/**
+	 * Cleans up all resources and closes the connection
+	 */
 	public void closeConnection(){
 		try {
 			if(this.rs != null && !this.rs.isClosed())

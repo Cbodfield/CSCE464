@@ -1,1 +1,9 @@
 /classes
+/FlightSearchQuery.class
+/FlightSearchResults.class
+/ViewAndBook.class
+/servlets
+/TransactionConfirmation.class
+/BookingHistory.class
+/Login.class
+/Registration.class

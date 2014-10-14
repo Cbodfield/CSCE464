@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 
 public class ExecuteDatabaseCall {
 	
+	//TODO - the logic in this class will likely be more entirely into the corresponding servlets 
+	
 	//Do we want to move the individual methods into their corresponding servlet files?
 	
 	//Helper class that dynamically builds up where clause in queries based on parameters passed in
@@ -35,6 +37,8 @@ public class ExecuteDatabaseCall {
 	//TODO - not finished - returns 2 dimensional array of objects - like a data table
 	public ArrayList<ArrayList<Object>> getSearchResults(String sSource, String sDestination, String sTravelDate, String sNumOfSeats, String sClass){
 		JDBCHelper jdbc = new JDBCHelper();
+		jdbc.connectToCSE464DB();
+		
 		ArrayList<Object> param =  new ArrayList<Object>();
 		ArrayList<ArrayList<Object>> results =  new ArrayList<ArrayList<Object>>();
 		ArrayList<String> sFields = new ArrayList<String>();
@@ -68,7 +72,6 @@ public class ExecuteDatabaseCall {
 					temp.add(rs1.getObject("ARRIVAL")); //arrival time, date, or both?
 					temp.add(rs1.getObject("")); //number of stops
 					temp.add(rs1.getObject("COST")); //cost
-					
 					
 					results.add(temp);
 				}
