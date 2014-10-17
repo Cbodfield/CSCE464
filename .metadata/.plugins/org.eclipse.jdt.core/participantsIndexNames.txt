@@ -1,3 +1,0 @@
-INDEX VERSION 1.126
-C:\Users\Elliot\Documents\Courses\CSCE_COURSES\CSCE_464\CSCE464\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3255709627.index
-\Team01-HW2\src
