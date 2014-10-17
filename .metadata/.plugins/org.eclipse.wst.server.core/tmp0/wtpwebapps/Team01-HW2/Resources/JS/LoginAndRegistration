@@ -6,7 +6,7 @@ function login(){
 	alert("Username and Password cannot be blank");
 	return;
 	}
-	$.get('LoginAndRegistration',{type:"login",user:username, pass:password},function(data) { 
+	$.post('Login',{type:"login",user:username, pass:password},function(data) { 
                        if(data.indexOf("failed") >-1){
                        //fail
                        alert("Failed Login");
@@ -33,14 +33,14 @@ function register(){
 	alert("Passwords cannot be blank and must match");
 	return;
 	}
-	$.get('LoginAndRegistration',{type:"register",user:username, pass:password},function(data) { 
+	$.post('Registration',{type:"register",user:username, pass:password},function(data) { 
       
        if(data.indexOf("failed") >-1){
        //bad registration
-       alert("Registration has failed");
+       	alert("Registration has failed");
        } else {
        //good registration
-       window.location = data;
+       	window.location = data;
        }
                 
     });
@@ -54,7 +54,7 @@ if(user.trim() != "" && user != null && user !="null"){
 
 function logout(){
 
-	$.get('LoginAndRegistration',{type:"logout"},function(data) { 
+	$.post('Login',{type:"logout"},function(data) { 
                      
                      window.location = data;
                                 

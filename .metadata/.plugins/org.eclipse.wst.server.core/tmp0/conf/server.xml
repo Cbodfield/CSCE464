@@ -131,7 +131,7 @@
                prefix="localhost_access_log." suffix=".txt" pattern="common" resolveHosts="false"/>
         -->
 
-      <Context docBase="D:\Github\CSCE464\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="D:\Github\CSCE464\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Team01-HW2" path="/Team01-HW2" reloadable="true" source="org.eclipse.jst.jee.server:Team01-HW2"/></Host>
+      <Context docBase="C:\Users\Elliot\Documents\Courses\CSCE_COURSES\CSCE_464\CSCE464\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\Elliot\Documents\Courses\CSCE_COURSES\CSCE_464\CSCE464\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Team01-HW2" path="/Team01-HW2" reloadable="true" source="org.eclipse.jst.jee.server:Team01-HW2"/></Host>
     </Engine>
   </Service>
 </Server>
