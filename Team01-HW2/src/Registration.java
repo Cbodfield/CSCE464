@@ -1,11 +1,13 @@
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import classes.UserUtils;
+import classes.JDBCHelper;
 
 /**
  * Servlet implementation class Registration
@@ -47,17 +49,43 @@ public class Registration extends HttpServlet {
 		}
 	}
 
+	//TODO - switch to return as boolean
 	public String RegisterUser(HttpServletRequest req, HttpServletResponse res) {
-		String valid = "false";
-		UserUtils util = new UserUtils(getServletContext());
+		//String valid = "false";
+		//UserUtils util = new UserUtils(getServletContext());
 		if(req.getParameter("user") !=null && req.getParameter("pass") !=null && !req.getParameter("user").equals("") && !req.getParameter("pass").equals("")){
-			valid = String.valueOf(util.addUser(req.getParameter("user"),
-					req.getParameter("pass")));
-	
-			return valid;
+				
+			ArrayList<Object> params = new ArrayList<Object>();
+			params.add(req.getParameter("user"));
+			params.add(req.getParameter("pass"));
+			
+			boolean result = RegisterUserDB(params);
+			
+			if (result){
+				return "true";
+			}else{
+				return "false";
+			}	
 		} else {
 			return "false";
 		}
 	}
 
+	
+	public boolean RegisterUserDB(ArrayList<Object> sqlParam){
+		JDBCHelper jdbc = new JDBCHelper();
+		jdbc.connectToTeamDB();
+		String query = "INSERT INTO users (email, password) VALUES(?, ?);";
+
+		int rowsAffected = jdbc.insertDB(query, sqlParam);
+		jdbc.closeConnection();
+		
+		if ((rowsAffected == -1) || (rowsAffected == 0)){
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
+	
 }
