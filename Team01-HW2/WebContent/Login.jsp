@@ -37,7 +37,7 @@ if(userName != null) {
 				
 					<input width="100%" type="text" placeholder="Username" id="username"/>
 					<input width="100%" type="password" placeholder="Password" id="password"/>	
-						
+					<br><br>
 					<a href="javascript:login();" class="" width="50%">Login</a>
 					<a href="Register.jsp;" class="" width="50%">Register</a>
 					
