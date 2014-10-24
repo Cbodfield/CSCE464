@@ -155,14 +155,14 @@ public class JDBCHelper {
 		try {
 			if(this.rs != null && !this.rs.isClosed())
 				this.rs.close();
-			if(this.ps != null && !this.ps.isClosed())
+			if(this.ps != null /*&& !this.ps.isClosed()*/)
 				this.ps.close();
 			if(this.conn != null && !this.conn.isClosed())
 				this.conn.close();
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			//throw new RuntimeException(e);
 		}
 		
 	}
