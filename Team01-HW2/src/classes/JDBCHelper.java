@@ -147,6 +147,37 @@ public class JDBCHelper {
 		return rowsAffected;
 	}
 	
+	public int updateDB(String query, ArrayList<Object> sqlParam){
+		int rowsAffected;
+		try{
+			this.ps = conn.prepareStatement(query);
+
+						
+			int i = 1;
+			for (Object a : sqlParam){
+				//System.out.println(a.getClass());
+				if (a.getClass() == String.class){
+					this.ps.setString(i, (String)a);
+					//System.out.println(String.format("I'm a String!  %d - %s", i, (String) a));
+				}else if(a.getClass() == Integer.class){
+					this.ps.setInt(i, (Integer)a);
+					//System.out.println(String.format("I'm an Integer!  %d - %d", i, (Integer) a));
+				}else if(a.getClass() == Double.class){
+					this.ps.setDouble(i, (Double)a);
+					//System.out.println(String.format("I'm a Double!  %d - %f", i, (Double) a));
+				}else if (a.getClass() == Timestamp.class){
+					this.ps.setTimestamp(i, (Timestamp)a);
+					//System.out.println(String.format("I'm a DateTime!  %d - %s", i, a.toString()));
+				}
+				i++;
+			}
+			rowsAffected = this.ps.executeUpdate();
+		}catch (SQLException e){
+			e.printStackTrace();
+			return -1;
+		}
+		return rowsAffected;
+	}
 	
 	/**
 	 * Cleans up all resources and closes the connection
