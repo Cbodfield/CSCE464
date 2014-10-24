@@ -11,16 +11,11 @@
 </head>
 <body>
 <%
-String userName = null;
-Cookie[] cookies = request.getCookies();
-if(cookies !=null){
-for(Cookie cookie : cookies){
-    if(cookie.getName().equals("user")) {
-    	userName = cookie.getValue();
-    }
-}
-}
-if(userName == null) {
+String user = null;
+
+user = (String)session.getAttribute("user");
+
+if(user == null) {
 	response.sendRedirect("Login.jsp");
 }
 %>
@@ -98,7 +93,7 @@ if(userName == null) {
 </tr>
 </table>
 	<script>
-var UserName= "<%=userName %>"
+var UserName= "<%=user %>"
 	ShowUsername(UserName);
 </script>
 </body>

@@ -5,6 +5,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import classes.UserUtils;
 
@@ -47,7 +48,10 @@ public class Login extends HttpServlet {
 
 				valid = LoginUser(request, response);
 				if (Boolean.valueOf(valid)) {
-
+					HttpSession session = request.getSession();
+					session.setAttribute("user", request.getParameter("user"));
+					session.setMaxInactiveInterval(30*60);
+					
 					// Successful login
 					Cookie loginCookie = new Cookie("user",
 					request.getParameter("user"));
@@ -61,16 +65,8 @@ public class Login extends HttpServlet {
 
 				}
 			} else if (type.equalsIgnoreCase("logout")) {
-
-				// LOGGING OUT
-				// invalidate the session if exists
-				Cookie cookie = new Cookie("user", null); // Not necessary, but
-															
-				cookie.setValue("");
-				cookie.setMaxAge(0); // Don't set to -1 or it will become a
-										// session cookie!
-				response.addCookie(cookie);
-
+				HttpSession session = request.getSession();
+				session.invalidate();
 				// no encoding because we have invalidated the session
 				response.getWriter().write("Login.jsp");
 			}
