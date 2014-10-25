@@ -50,7 +50,7 @@ function register(){
 
 function ShowUsername(user){
 if(user.trim() != "" && user != null && user !="null"){
-	$("#login_username").html("Welcome " +user +"<br><a style='width:150px' href='javascript:logout()'>Logout</a>");
+	$("#login_username").html("Welcome <b>" +user +"!</b><br><a style='width:150px' href='javascript:logout()'>Logout</a>");
 	}
 }
 

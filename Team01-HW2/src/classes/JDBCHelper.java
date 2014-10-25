@@ -128,7 +128,7 @@ public class JDBCHelper {
 		try{
 			this.ps = conn.prepareStatement(query);
 
-			int i = 0;
+			int i = 1;
 			if(sqlParam !=null){
 				for (T a : sqlParam){
 					//System.out.println(a.getClass());
@@ -195,11 +195,11 @@ public class JDBCHelper {
 	 */
 	public void closeConnection(){
 		try {
-			if(this.rs != null && !this.rs.isClosed())
+			if(this.rs != null /*&& !this.rs.isClosed()*/)
 				this.rs.close();
 			if(this.ps != null /*&& !this.ps.isClosed()*/)
 				this.ps.close();
-			if(this.conn != null && !this.conn.isClosed())
+			if(this.conn != null /*&& !this.conn.isClosed()*/)
 				this.conn.close();
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");

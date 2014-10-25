@@ -9,15 +9,20 @@
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
 </head>
+<script>
+	
+</script>
 <body>
 <%
 String user = null;
-
+String details = "";
 user = (String)session.getAttribute("user");
 
 if(user == null) {
 	response.sendRedirect("Login.jsp");
 }
+
+details = String.valueOf(request.getAttribute("details"));
 %>
 <table id=global_table border=0>
 <tr>
@@ -46,36 +51,32 @@ if(user == null) {
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Welcome to FlightSearch.Com</h1></span>
+		<span id=welcome><h1>View and Book</h1></span>
 		<div>
 			<table>
 				<tr>
 					<td>Flight Number</td>
-					<td>ABC12345</td>
+					<td id="flightnumber">ABC12345</td>
 				</tr>
 				<tr>
 					<td>Flight Date</td>
-					<td>09/28/2014</td>
+					<td id="flightdate">09/28/2014</td>
 				</tr>
 				<tr>
 					<td>Departure Time</td>
-					<td>08:00</td>
+					<td id="departure">08:00</td>
 				</tr>
 				<tr>
 					<td>Arrival Time</td>
-					<td>17:00</td>
+					<td id="arrival">17:00</td>
 				</tr>
 				<tr>
 					<td>Number of Stops</td>
-					<td>2</td>
-				</tr>
-				<tr>
-					<td>Jet Type</td>
-					<td>Boeing 747</td>
+					<td id="stops" >2</td>
 				</tr>
 				<tr>
 					<td>Cost</td>
-					<td>$1,434.87</td>
+					<td id="cost">$1,434.87</td>
 				</tr>
 				<tr>
 					<td>Seats</td>
@@ -106,6 +107,31 @@ if(user == null) {
 	<script>
 var UserName= "<%=user %>"
 	ShowUsername(UserName);
+	
+var details = '<%=details %>';
+var json = JSON.parse(details);
+$( document ).ready(function() {
+	//$("#results").html(JSONFlights);
+
+
+	$("#flightnumber").html(json[0].id);
+	
+	var dep = json[0].departure;
+	var arrival = json[0].arrival;
+	var dep_date = dep.split(" ");
+	var arrival_date = arrival.split(" ");
+	if(dep_date[0] == arrival_date[0]){
+		$("#flightdate").html(dep_date[0]);
+	} else {
+		$("#flightdate").html(dep_date[0] + "-" + arrival_date[0]);
+	}
+	
+	$("#departure").html(dep_date[1]);
+	$("#arrival").html(arrival_date[1]);
+	$("#stops").html(json[0].stops);
+	$("#cost").html("$" + json[0].cost);
+
+});
 </script>
 </body>
 </html>

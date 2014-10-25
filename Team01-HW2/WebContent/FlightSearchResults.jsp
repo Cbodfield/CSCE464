@@ -9,7 +9,41 @@
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
 	<script>
-	function ViewAndBook(id){
+	function ViewAndBook(flightid,cost,stops){
+		
+		
+		 event.preventDefault();
+		    var newForm = jQuery('<form>', {
+		        'action': 'FlightSearchResults',
+		        'method':'POST'
+		    }).append(jQuery('<input>', {
+		        'name': 'f',
+		        'value': flightid,
+		        'type': 'hidden'
+		    })).append(jQuery('<input>', {
+		        'name': 'c',
+		        'value': cost,
+		        'type': 'hidden'
+		    })).append(jQuery('<input>', {
+		        'name': 's',
+		        'value': stops,
+		        'type': 'hidden'
+		    }));
+		    newForm.submit();
+		
+		/*$.post('FlightSearchResults',
+				{f:flightid,c:cost,s:stops},
+				function(data) { 
+                    if(data.indexOf("failed") >-1){
+                    	//fail
+                    	alert("Failed Login");
+                   	} else {
+                    	//success
+                   	 window.location = data;
+                    }
+                             
+                 }	                             
+	                    );*/
 		
 	}
 	</script>
@@ -84,7 +118,7 @@ $( document ).ready(function() {
 		    html+="<td>" + json[i].arrivaltime + "</td>";
 		    html+="<td>" + json[i].stops + "</td>";
 		    html+="<td style='color:green'><b>$" + json[i].cost + "</b></td>";
-		    html+="<td align='center'><button class='nav_button' id='viewandbook' class onclick='javascript:ViewAndBook("+json[i].flightID+");'>Select</button></td></tr>";
+		    html+="<td align='center'><button class='nav_button' id='viewandbook' class onclick='javascript:ViewAndBook("+json[i].flightID+","+json[i].cost+","+json[i].stops+");'>Select</button></td></tr>";
 		    count++;
 		  }
 		}
