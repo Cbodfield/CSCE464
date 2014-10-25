@@ -8,8 +8,14 @@
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<script>
+	function ViewAndBook(id){
+		
+	}
+	</script>
 </head>
 <body>
+<%@ page import="org.json.JSONObject,classes.Flight,java.util.ArrayList,org.json.*" %>
 <%
 String user = null;
 
@@ -18,13 +24,15 @@ user = (String)session.getAttribute("user");
 if(user == null) {
 	response.sendRedirect("Login.jsp");
 }
+
+String sJSONFlights = String.valueOf(request.getAttribute("flights"));
 %>
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
 		<table border=0 class=navtable width="100%">
 			<tr><td><div id=date></div></td></tr>
-			<tr><td><div id=time></div></td></tr>
+			<tr><td><div id=time></div></td></tr>      
 			<tr><td><hr/></td></tr>
 			<tr><td>
 				<div id=login_username>
@@ -46,55 +54,47 @@ if(user == null) {
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Welcome to FlightSearch.Com</h1></span>
-		<div>
-			<table class="bottomBorder">
-				<thead>
-					<tr>
-						<td>Flight Number</td>
-						<td>Flight Date</td>
-						<td>Departure Time</td>
-						<td>Arrival Time</td>
-						<td>Number of Stops</td>
-						<td>Cost</td>
-						<td></td>
-					</tr>
-				</thead>
-				<tr>
-					<td>A123BS</td>
-					<td>08/19/2014</td>
-					<td>13:00</td>
-					<td>15:30</td>
-					<td>1</td>
-					<td>$200.00</td>
-					<td><button onclick="location.href='${pageContext.request.contextPath}/ViewBook.jsp'" >View and Book</button></td>
-				</tr>
-				<tr>
-					<td>BINA9865</td>
-					<td>01/13/2015</td>
-					<td>19:00</td>
-					<td>22:30</td>
-					<td>1</td>
-					<td>$150.00</td>
-					<td><button onclick="location.href='${pageContext.request.contextPath}/ViewBook.jsp'">View and Book</button></td>
-				</tr>
-				<tr>
-					<td>98GA689A1</td>
-					<td>03/14/2015</td>
-					<td>08:00</td>
-					<td>14:45</td>
-					<td>2</td>
-					<td>$457.13</td>
-					<td><button onclick="location.href='${pageContext.request.contextPath}/ViewBook.jsp'">View and Book</button></td>
-				</tr>
-			</table>
+		<span id=welcome><h1>Flight Search Results</h1></span><div id="count"></div><br>
+		
+		<div id="results">
+			
 		</div>
 	</td>
 </tr>
 </table>
 	<script>
-var UserName= "<%=user %>"
+var UserName= "<%=user %>";
 	ShowUsername(UserName);
+	
+var json = '<%=sJSONFlights %>';
+json=JSON.parse(json);
+$( document ).ready(function() {
+	//$("#results").html(JSONFlights);
+	var wehaverowsbaby=false;
+	var html = "";
+	var count = 0;
+	html+="<table class='resultsTable'><tr><th>Flight Number</th><th>Departure Time</th><th>Arrival Time</th><th># Of Stops</th><th>Cost</th><th>View and Book</th></tr>";
+	for (var i in json) {
+		  if (json.hasOwnProperty(i)) {
+			  wehaverowsbaby=true;
+			  count++;
+		    //alert(key + " -> " + JSONFlights[key]);
+		    html+="<tr><td>" + json[i].flightID + "</td>";
+		    html+="<td>" + json[i].departuretime + "</td>";
+		    html+="<td>" + json[i].arrivaltime + "</td>";
+		    html+="<td>" + json[i].stops + "</td>";
+		    html+="<td style='color:green'><b>$" + json[i].cost + "</b></td>";
+		    html+="<td align='center'><button class='nav_button' id='viewandbook' class onclick='javascript:ViewAndBook("+json[i].flightID+");'>Select</button></td></tr>";
+		    count++;
+		  }
+		}
+	html+="</table>";
+	if(!wehaverowsbaby){
+		html="<h5>No Flights match your criteria</h5>";
+	}
+	$("#count").html("Number of flights: " +count);
+	$("#results").html(html);
+});
 </script>
 </body>
 </html>

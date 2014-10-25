@@ -6,8 +6,24 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Flight Search</title>
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
+	<script src="Resources/JS/jquery-ui.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<link href="Resources/jquery-ui.structure.css" rel="stylesheet" type="text/css">
+	<link href="Resources/jquery-ui.theme.css" rel="stylesheet" type="text/css">
+	
+	<script>
+	$( document ).ready(function() {
+		var airports = ["ATL", "ANC", "AUS", "BWI", "BOS", "CLT", "MDW", "ORD", "CVG", "CLE", "CMH", "DFW", "DEN", "DTW", "FLL", "RSW", "BDL", "HNL", "IAH", "HOU", "IND", "MCI", "LAS", "LAX", "MEM", "MIA", "MSP", "BNA", "MSY", "JFK", "LGA", "EWR", "OAK", "ONT", "MCO", "PHL", "PHX", "PIT", "PDX", "RDU", "SMF", "SLC", "SAT", "SAN", "SFO", "SJC", "SNA", "SEA", "STL", "TPA", "IAD", "DCA"]; 
+		jQuery.each(airports,function(key,val){
+			$("#source").append($("<option></option>").attr("value",val).text(val));
+			$("#destination").append($("<option></option>").attr("value",val).text(val));
+			
+			});
+		$("#datepicker").datepicker();
+		$("#datepicker").datepicker("option","dateFormat","yy-mm-dd");
+	});
+	</script>
 </head>
 <body>
 <%
@@ -48,35 +64,40 @@ if(user == null) {
 	<td id=content valign="top" align="middle">
 		<span id=welcome><h1>Welcome to FlightSearch.Com</h1></span>
 		<div>
+		<form action="FlightSearchQuery" method="POST">
 			<table>
 				<tr>
 					<td>Source</td>
-					<td><input type="text"></input></td>
+					<td><select id="source" name="source"></select>
+					</td>
 				</tr>
 				<tr>
 					<td>Destination</td>
-					<td><input type="text"></input></td>
+					<td><select id="destination" name="destination"></select></td>
 				</tr>
 				<tr>
-					<td>Travel Date</td>
-					<td><input type="text"></input></td>
+					<td>Departure Date</td>
+					<td><input id="datepicker" type="text" name="date"></input></td>
 				</tr>
 				<tr>
 					<td>Number of Seats</td>
-					<td><input type="text"></input></td>
+					<td><input id="seats" type="text" name="seats"></input></td>
 				</tr>
 				<tr>
 					<td>Class</td>
-					<td><select name="class">
+					<td>
+					<select name="class">
 						<option value="economy">Economy</option>
-						<option value="economy">Business</option>
-						<option value="economy">First Class</option>
-					</select></td>
+						<option value="business">Business</option>
+						<option value="first class">First Class</option>
+					</select>
+					</td>
 				</tr>
 				<tr>
-					<td colspan=2 style="text-align:center"><button onclick="location.href='${pageContext.request.contextPath}/FlightSearchResults.jsp'">Search</button></td>
+					<td colspan=2 style="text-align:center"><input type="submit" value="Search"/></td>
 				</tr>
-			</table>	
+			</table>
+			</form>	
 		</div>
 	</td>
 </tr>

@@ -6,13 +6,15 @@ function login(){
 	alert("Username and Password cannot be blank");
 	return;
 	}
-	$.post('Login',{type:"login",user:username, pass:password},function(data) { 
+	$.post('Login',
+			{type:"login",user:username, pass:password},
+			function(data) { 
                        if(data.indexOf("failed") >-1){
-                       //fail
-                       alert("Failed Login");
-                       } else {
-                       //success
-                       window.location = data;
+                       	//fail
+                       	alert("Failed Login");
+                      	} else {
+                       	//success
+                      	 window.location = data;
                        }
                                 
                     });

@@ -29,8 +29,8 @@ public class JDBCHelper {
 	 * @return true when connection was successful
 	 */
 	public boolean connectToCSE464DB(){
-		this.conn = this.initiateConnection("cse.unl.edu", "cse464", "cbodfie", "hr8Kc3"); //TODO - figure out credentials to the db
-		if (this.conn.equals(null)){
+		this.conn = this.initiateConnection("cse.unl.edu", "cse464", "emitchel", "camaro"); 
+		if (this.conn == null){
 			return false;
 		}else{
 			return true;
@@ -43,7 +43,7 @@ public class JDBCHelper {
 	 */
 	public boolean connectToTeamDB(){
 		this.conn = this.initiateConnection("cse.unl.edu", "cbodfie", "cbodfie", "hr8Kc3");
-		if (this.conn.equals(null)){
+		if (this.conn == null){
 			return false;
 		}else{
 			return true;
@@ -84,27 +84,69 @@ public class JDBCHelper {
 	 * @param sqlParam An ArrayList of objects of parameters for the Select Statement.
 	 * @return A resultset if the query is successful, else null
 	 */
-	public <T> ResultSet queryDB(String query, ArrayList<T> sqlParam){
+	public <T> ResultSet LIKEqueryDB(String query, ArrayList<T> sqlParam){
 		try{
 			this.ps = conn.prepareStatement(query);
 
 			int i = 1;
-			for (T a : sqlParam){
-				//System.out.println(a.getClass());
-				if (a.getClass() == String.class){
-					this.ps.setString(i, (String)a);
-					//System.out.println(String.format("I'm a String!  %d - %s", i, (String) a));
-				}else if(a.getClass() == Integer.class){
-					this.ps.setInt(i, (Integer)a);
-					//System.out.println(String.format("I'm an Integer!  %d - %d", i, (Integer) a));
-				}else if(a.getClass() == Double.class){
-					this.ps.setDouble(i, (Double)a);
-					//System.out.println(String.format("I'm a Double!  %d - %f", i, (Double) a));
-				}else if (a.getClass() == Timestamp.class){
-					this.ps.setTimestamp(i, (Timestamp)a);
-					//System.out.println(String.format("I'm a DateTime!  %d - %s", i, a.toString()));
+			if(sqlParam !=null){
+				for (T a : sqlParam){
+					//System.out.println(a.getClass());
+					if (a.getClass() == String.class){
+						this.ps.setString(i, (String)"%" +a+"%");
+						//System.out.println(String.format("I'm a String!  %d - %s", i, (String) a));
+					}else if(a.getClass() == Integer.class){
+						this.ps.setInt(i, (Integer)a);
+						//System.out.println(String.format("I'm an Integer!  %d - %d", i, (Integer) a));
+					}else if(a.getClass() == Double.class){
+						this.ps.setDouble(i, (Double)a);
+						//System.out.println(String.format("I'm a Double!  %d - %f", i, (Double) a));
+					}else if (a.getClass() == Timestamp.class){
+						this.ps.setTimestamp(i, (Timestamp)a);
+						//System.out.println(String.format("I'm a DateTime!  %d - %s", i, a.toString()));
+					}
+					i++;
 				}
-				i++;
+			}
+			this.rs = this.ps.executeQuery();
+		}catch (SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		return this.rs;
+	}
+	
+	
+	/**
+	 * 
+	 * 
+	 * @param query A Select Statement.  Use ? for parameters and the sqlParam parameters to pass in values. 
+	 * @param sqlParam An ArrayList of objects of parameters for the Select Statement.
+	 * @return A resultset if the query is successful, else null
+	 */
+	public <T> ResultSet queryDB(String query, ArrayList<T> sqlParam){
+		try{
+			this.ps = conn.prepareStatement(query);
+
+			int i = 0;
+			if(sqlParam !=null){
+				for (T a : sqlParam){
+					//System.out.println(a.getClass());
+					if (a.getClass() == String.class){
+						this.ps.setString(i, (String)a);
+						//System.out.println(String.format("I'm a String!  %d - %s", i, (String) a));
+					}else if(a.getClass() == Integer.class){
+						this.ps.setInt(i, (Integer)a);
+						//System.out.println(String.format("I'm an Integer!  %d - %d", i, (Integer) a));
+					}else if(a.getClass() == Double.class){
+						this.ps.setDouble(i, (Double)a);
+						//System.out.println(String.format("I'm a Double!  %d - %f", i, (Double) a));
+					}else if (a.getClass() == Timestamp.class){
+						this.ps.setTimestamp(i, (Timestamp)a);
+						//System.out.println(String.format("I'm a DateTime!  %d - %s", i, a.toString()));
+					}
+					i++;
+				}
 			}
 			this.rs = this.ps.executeQuery();
 		}catch (SQLException e){
