@@ -1,5 +1,8 @@
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mysql.jdbc.ResultSet;
+
+import classes.JDBCHelper;
 import classes.UserUtils;
 
 /**
@@ -76,12 +82,52 @@ public class Login extends HttpServlet {
 		}
 	}
 
+//	public String LoginUser(HttpServletRequest req, HttpServletResponse res) {
+//		String valid = "false";
+//		UserUtils util = new UserUtils(getServletContext());
+//
+//		valid = String.valueOf(util.userExist(req.getParameter("user"),
+//				req.getParameter("pass")));
+//		return valid;
+//	}
 	public String LoginUser(HttpServletRequest req, HttpServletResponse res) {
-		String valid = "false";
-		UserUtils util = new UserUtils(getServletContext());
 
-		valid = String.valueOf(util.userExist(req.getParameter("user"),
-				req.getParameter("pass")));
-		return valid;
+
+		ArrayList<Object> sqlParam = new ArrayList<Object>();
+		sqlParam.add(req.getParameter("user"));
+		sqlParam.add(req.getParameter("pass"));
+
+		boolean result = LoginUserDB(sqlParam);
+
+		if (result){
+		return "true";
+		}else {
+		return "false";
+		}
+
+		}
+
+
+		public boolean LoginUserDB(ArrayList<Object> sqlParam){
+			JDBCHelper jdbc = new JDBCHelper();
+			jdbc.connectToTeamDB();
+			String query = "SELECT user_id FROM users WHERE email = ? AND password = ?;";
+	
+			ResultSet rs = (ResultSet) jdbc.queryDB(query, sqlParam);
+			int nUser_id = -1;
+	
+			if (rs != null) {
+			try {
+			if (rs.next()){
+				nUser_id = rs.getInt("user_id");
+				jdbc.closeConnection();
+				return true;
+			}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			}
+			return false;
 	}
 }

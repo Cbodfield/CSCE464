@@ -41,7 +41,7 @@ public class ViewAndBook extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 	}
 
 	
@@ -49,14 +49,16 @@ public class ViewAndBook extends HttpServlet {
 		ArrayList<Object> sqlParam = new ArrayList<Object>();
 		
 		sqlParam.add(sFlightNumber);
+		
 		sqlParam.add(nRequestedSeats);
 
 		JDBCHelper jdbc = new JDBCHelper();
+		
 		jdbc.connectToCSE464DB();
+		
 		String query = "SELECT * FROM flights JOIN planes ON flights.plane = planes.id WHERE flights.id = ?;";
 
 		ResultSet rs = jdbc.queryDB(query, sqlParam);
-		
 		
 		JSONArray results = new JSONArray();
 		try {
