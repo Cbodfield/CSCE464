@@ -10,7 +10,10 @@
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
 </head>
 <script>
-	
+	function selectFlight(){
+		
+		location.href='Transaction.jsp';
+	}
 </script>
 <body>
 <%
@@ -94,10 +97,14 @@ details = String.valueOf(request.getAttribute("details"));
 					</td>
 				</tr>
 				<tr>
-					<td colspan='2' style="text-align:center"><button onclick="location.href='${pageContext.request.contextPath}/Transaction.jsp'">Select</button></td>
+					<td colspan='2'style="text-align:center">
+					<button class='nav_button'  onclick="selectFlight()">Select</button>
+					</td>
 				</tr>
 				<tr>
-					<td colspan='2' style="text-align:center"><button onclick="location.href='${pageContext.request.contextPath}/FlightSearchResults.jsp'">Return</button></td>
+					<td colspan='2' style="text-align:center">
+					<button class='nav_button'  onclick="javascript:window.history.back()">Return</button>
+					</td>
 				</tr>
 			</table>
 		</div>
