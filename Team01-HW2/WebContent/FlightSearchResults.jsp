@@ -12,7 +12,8 @@
 	function ViewAndBook(flightid,cost,stops){
 		
 		//round about hacky way to implement a submit form....
-		 event.preventDefault();
+		
+		
 		    var newForm = jQuery('<form>', {
 		        'action': 'FlightSearchResults',
 		        'method':'POST'
@@ -102,7 +103,7 @@ $( document ).ready(function() {
 			    html+="<td>" + json[i].arrivaltime + "</td>";
 			    html+="<td>" + json[i].stops + "</td>";
 			    html+="<td style='color:green'><b>$" + json[i].cost + "</b></td>";
-			    html+="<td align='center'><button class='nav_button' id='viewandbook' class onclick='javascript:ViewAndBook("+json[i].flightID+","+json[i].cost+","+json[i].stops+");'>Select</button></td></tr>";
+			    html+="<td align='center'><a href='javascript:ViewAndBook("+json[i].flightID+","+json[i].cost+","+json[i].stops+");'>Select</a></td></tr>";
 			    count++;
 		  }
 		}
