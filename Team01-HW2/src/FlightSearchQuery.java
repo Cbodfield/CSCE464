@@ -166,6 +166,7 @@ public class FlightSearchQuery extends HttpServlet {
 					} else {
 						int seatsReserved = Integer.valueOf(String.valueOf(rs.getObject(r)));
 						int seatsTotal = Integer.valueOf(String.valueOf(rs.getObject(c)));
+						
 						if((seatsTotal-seatsReserved)>= 0){
 							//IF THERE ARE SEATS AVAILABLE
 							flights.add(f);

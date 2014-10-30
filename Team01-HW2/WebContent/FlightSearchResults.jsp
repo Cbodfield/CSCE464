@@ -11,7 +11,7 @@
 	<script>
 	function ViewAndBook(flightid,cost,stops){
 		
-		
+		//round about hacky way to implement a submit form....
 		 event.preventDefault();
 		    var newForm = jQuery('<form>', {
 		        'action': 'FlightSearchResults',
@@ -30,21 +30,6 @@
 		        'type': 'hidden'
 		    }));
 		    newForm.submit();
-		
-		/*$.post('FlightSearchResults',
-				{f:flightid,c:cost,s:stops},
-				function(data) { 
-                    if(data.indexOf("failed") >-1){
-                    	//fail
-                    	alert("Failed Login");
-                   	} else {
-                    	//success
-                   	 window.location = data;
-                    }
-                             
-                 }	                             
-	                    );*/
-		
 	}
 	</script>
 </head>
@@ -111,15 +96,14 @@ $( document ).ready(function() {
 	for (var i in json) {
 		  if (json.hasOwnProperty(i)) {
 			  wehaverowsbaby=true;
-			  count++;
-		    //alert(key + " -> " + JSONFlights[key]);
-		    html+="<tr><td>" + json[i].flightID + "</td>";
-		    html+="<td>" + json[i].departuretime + "</td>";
-		    html+="<td>" + json[i].arrivaltime + "</td>";
-		    html+="<td>" + json[i].stops + "</td>";
-		    html+="<td style='color:green'><b>$" + json[i].cost + "</b></td>";
-		    html+="<td align='center'><button class='nav_button' id='viewandbook' class onclick='javascript:ViewAndBook("+json[i].flightID+","+json[i].cost+","+json[i].stops+");'>Select</button></td></tr>";
-		    count++;
+			    //alert(key + " -> " + JSONFlights[key]);
+			    html+="<tr><td>" + json[i].flightID + "</td>";
+			    html+="<td>" + json[i].departuretime + "</td>";
+			    html+="<td>" + json[i].arrivaltime + "</td>";
+			    html+="<td>" + json[i].stops + "</td>";
+			    html+="<td style='color:green'><b>$" + json[i].cost + "</b></td>";
+			    html+="<td align='center'><button class='nav_button' id='viewandbook' class onclick='javascript:ViewAndBook("+json[i].flightID+","+json[i].cost+","+json[i].stops+");'>Select</button></td></tr>";
+			    count++;
 		  }
 		}
 	html+="</table>";
