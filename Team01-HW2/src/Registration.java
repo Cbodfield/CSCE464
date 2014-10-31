@@ -1,11 +1,14 @@
-
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.mysql.jdbc.ResultSet;
 
 import classes.JDBCHelper;
 
@@ -51,8 +54,6 @@ public class Registration extends HttpServlet {
 
 	//TODO - switch to return as boolean
 	public String RegisterUser(HttpServletRequest req, HttpServletResponse res) {
-		//String valid = "false";
-		//UserUtils util = new UserUtils(getServletContext());
 		if(req.getParameter("user") !=null && req.getParameter("pass") !=null && !req.getParameter("user").equals("") && !req.getParameter("pass").equals("")){
 				
 			ArrayList<Object> params = new ArrayList<Object>();
@@ -77,15 +78,65 @@ public class Registration extends HttpServlet {
 		jdbc.connectToTeamDB();
 		String query = "INSERT INTO users (email, password) VALUES(?, ?);";
 
-		int rowsAffected = jdbc.insertDB(query, sqlParam);
+		int returnedKey = jdbc.insertDB(query, sqlParam);
 		jdbc.closeConnection();
 		
-		if ((rowsAffected == -1) || (rowsAffected == 0)){
+		if ((returnedKey == -1) || (returnedKey == 0)){
+			return false;
+		}else {
+			if (CreateAccount(sqlParam)){
+				return true;
+			}else{
+				return false;	
+			}			
+		}
+	}
+	
+	public boolean CreateAccount(ArrayList<Object> sqlParam){
+		JDBCHelper jdbc = new JDBCHelper();
+		jdbc.connectToTeamDB();
+		
+		String userid = GetUserID(sqlParam);
+		String query = "INSERT INTO accounts (holder_id, routing_number, balance) VALUES(?, ?, ?);";
+
+		ArrayList<Object> sql = new ArrayList<Object>();
+		sql.add(userid);
+		sql.add((new Random()).nextInt(1000000));
+		sql.add((new Random()).nextInt(5000));
+		
+		int returnedKey = jdbc.insertDB(query, sql);
+		jdbc.closeConnection();
+		
+		if ((returnedKey == -1) || (returnedKey == 0)){
 			return false;
 		}else {
 			return true;
 		}
 	}
+	
+	public String GetUserID(ArrayList<Object> sqlParam){
+		JDBCHelper jdbc = new JDBCHelper();
+		jdbc.connectToTeamDB();
+		String query = "SELECT user_id FROM users WHERE email = ? AND password = ?;";
+		int n;
+		ResultSet rs = (ResultSet) jdbc.queryDB(query, sqlParam);
+		
+
+		if (rs != null) {
+		try {
+		if (rs.next()){
+			n = rs.getInt("user_id");
+			jdbc.closeConnection();
+			return String.valueOf(n);
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "";
+		}
+		}
+		return "";
+}
+	
 	
 	
 }

@@ -13,7 +13,9 @@ public class Flight {
 	public int nNumberOfStops =0;
 	public int nCost =0;
 	
-	public void generateCost(){
-		this.nCost = (int)(new Random()).nextInt(1000)+100;
-	}
+//	public void generateCost(){
+//		//this.nCost = (int)(new Random()).nextInt(1000)+100;
+//		CostGenerator cg = new CostGenerator();
+//		this.nCost = Integer.valueOf(cg.generateFlightCost(this.sSource, this.sDestination));
+//	}
 }

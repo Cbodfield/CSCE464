@@ -18,6 +18,7 @@ user = (String)session.getAttribute("user");
 if(user == null) {
 	response.sendRedirect("Login.jsp");
 }
+String details = String.valueOf(request.getAttribute("details"));
 %>
 <table id=global_table border=0>
 <tr>
@@ -46,51 +47,70 @@ if(user == null) {
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Welcome to FlightSearch.Com</h1></span>
-		<div>
+		<span id=welcome><h1>Transaction</h1></span>
+		<div id="detailsOut">
 			<table>
 				<tr>
 					<td>Flight Number</td>
-					<td>ABC12345</td>
-				</tr>
-				<tr>
-					<td>Flight Date</td>
-					<td>09/28/2014</td>
+					<td id="flightid">ABC12345</td>
 				</tr>
 				<tr>
 					<td>Departure Time</td>
-					<td>08:00</td>
+					<td id="departure">08:00</td>
 				</tr>
 				<tr>
 					<td>Arrival Time</td>
-					<td>17:00</td>
-				</tr>
-				<tr>
-					<td>Number of Stops</td>
-					<td>2</td>
-				</tr>
-				<tr>
-					<td>Number of Seats</td>
-					<td>3</td>
+					<td id="arrival">17:00</td>
 				</tr>
 				<tr>
 					<td>Total Cost</td>
-					<td>$1,434.87</td>
+					<td id="cost">$1,434.87</td>
 				</tr>
 				<tr>
-					<td colspan=2>Your purchase has been confirmed!</td>
+					<td colspan=2><b>Your purchase has been confirmed!</b></td>
 				</tr>
 				<tr>
-					<td colspan='2' style="text-align:center"><button onclick="location.href='${pageContext.request.contextPath}/FlightSearchQuery.jsp'">Return Home</button></td>
+					<td colspan='2' style="text-align:center"><button class="nav_button" onclick="location.href='FlightSearchQuery.jsp'">Return Home</button></td>
 				</tr>
 				</table>
 		</div>
+		<div id="passengerdetails">
+		</div>
+		<br>
+		<center><A HREF="javascript:window.print()">Click to Print This Page</A></center>
 	</td>
 </tr>
 </table>
 <script>
 var UserName= "<%=user %>"
 	ShowUsername(UserName);
+	
+var json = '<%=details %>';
+$( document ).ready(function() {
+	details = JSON.parse(json);
+	var numberOfSeats  =0 ;
+	if(!details.bSuccess){
+		$("#detailsOut").html(details.sMessage);
+	} else {
+		
+		$("#flightid").html(details.id);
+		//$("#operator").html(details.operator);
+		//$("#source").html(details.source);
+		//$("#destination").html(details.destination);
+		$("#departure").html(details.departure);
+		$("#arrival").html(details.arrival);
+		$("#cost").html(details.cost);
+		numberOfSeats = parseInt(details.seats);
+	}
+	var html ="<table><tr><th>Name</th><th>Age</th><th>Sex</th></tr>";
+	for(var i =0;i<numberOfSeats;i++){
+		html+="<tr><td><input type='text' ></input></td><td><input type='text'></input></td><td><input type='text'></input></td></tr>";
+	}
+	html+="</table>";
+	$("#passengerdetails").html(html);
+	
+	
+});
 </script>
 </body>
 </html>

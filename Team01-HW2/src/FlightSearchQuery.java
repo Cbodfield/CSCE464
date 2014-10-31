@@ -18,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
+import classes.CostGenerator;
 import classes.Flight;
 import classes.JDBCHelper;
 
@@ -139,18 +141,20 @@ public class FlightSearchQuery extends HttpServlet {
 		
 		ArrayList<Flight> flights = new ArrayList<Flight>();
 		FlightHelper fh = new FlightHelper();
+		CostGenerator cg = new CostGenerator();
 		if (rs != null) {
 			
 		
 			try {
 				while (rs.next()) {
 					Flight f = new Flight();
-					f.generateCost();
+					
 					f.sDepartureTime = String.valueOf(rs.getObject("departure"));
 					f.sArrivalTime = String.valueOf(rs.getObject("arrival"));
 					f.sOperator = String.valueOf(rs.getObject("operator"));
 					f.sSource = String.valueOf(rs.getObject("source"));
 					f.sDestination = String.valueOf(rs.getObject("destination"));
+					f.nCost = Integer.valueOf(cg.generateFlightCost(f.sSource, f.sDestination));
 					f.sFlightID = String.valueOf(rs.getObject("id"));
 					f.sPlaneNumber = String.valueOf(rs.getObject("plane"));
 					

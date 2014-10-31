@@ -8,6 +8,42 @@
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<script>
+	function BookIt(){
+		var cost = $("#cost").html();
+		cost = cost.replace("$","");
+		var seats = $("#seats").html();
+		var flightid=$("#flightid").html();
+		var account = $("#accountnumber").val();
+		var routing = $("#routingnumber").val();
+		var newForm = jQuery('<form>', {
+	        'action': 'TransactionConfirmation',
+	        'method':'POST',
+	    }).append(jQuery('<input>', {
+	        'name': 'flightid',
+	        'value': flightid,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'accountnumber',
+	        'value': account,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'cost',
+	        'value': cost,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'routingnumber',
+	        'value': routing,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'seats',
+	        'value': seats,
+	        'type': 'hidden'
+	    }));
+	    
+	    newForm.submit();
+	}
+	</script>
 </head>
 <body>
 <%
@@ -18,6 +54,8 @@ user = (String)session.getAttribute("user");
 if(user == null) {
 	response.sendRedirect("Login.jsp");
 }
+
+String details = String.valueOf(request.getAttribute("details"));
 %>
 <table id=global_table border=0>
 <tr>
@@ -46,60 +84,64 @@ if(user == null) {
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Welcome to FlightSearch.Com</h1></span>
-		<div>
+		<span id=welcome><h1>Confirm Transaction</h1></span>
+		<div id="detailsOut">
 			<table>
 				<tr>
 					<td>Flight Number</td>
-					<td>ABC12345</td>
+					<td id="flightid">ABC12345</td>
 				</tr>
 				<tr>
-					<td>Flight Date</td>
-					<td>09/28/2014</td>
+					<td>Operator</td>
+					<td id="operator">ABC12345</td>
 				</tr>
 				<tr>
-					<td>Departure Time</td>
-					<td>08:00</td>
+					<td>Source</td>
+					<td id="source">ABC12345</td>
 				</tr>
 				<tr>
-					<td>Arrival Time</td>
-					<td>17:00</td>
+					<td>Destination</td>
+					<td id="destination">ABC12345</td>
 				</tr>
 				<tr>
-					<td>Number of Stops</td>
-					<td>2</td>
+					<td >Departure Day/Time</td>
+					<td id="departure">08:00</td>
 				</tr>
 				<tr>
-					<td>Number of Seats</td>
-					<td>3</td>
+					<td >Arrival Day/Time</td>
+					<td id="arrival">17:00</td>
 				</tr>
 				<tr>
-					<td>Total Cost</td>
-					<td>$1,434.87</td>
+					<td >Number of Stops</td>
+					<td id="stops">2</td>
+				</tr>
+				<tr>
+					<td >Number of Seats</td>
+					<td id="seats">3</td>
+				</tr>
+				<tr>
+					<td >Total Cost</td>
+					<td id="cost">$1,434.87</td>
 				</tr>
 				<tr style="height:30px">
 					<td colspan=2></td>
 				</tr>
 				<tr>
-					<td colspan=2>Payment Information</td>
-				</tr>
-				<tr>
-					<td>Account Holder Name</td>
-					<td><input type="text"></td>
+					<td align='middle' colspan='2'>Payment Information</td>
 				</tr>
 				<tr>
 					<td>Bank Routing Number</td>
-					<td><input type="text"></td>
+					<td><input id="routingnumber" type="text"></td>
 				</tr>
 				<tr>
 					<td>Account Number</td>
-					<td><input type="text"></td>
+					<td><input id="accountnumber" type="text"></td>
 				</tr>
 				<tr>
-					<td colspan='2' style="text-align:center"><button onclick="location.href='${pageContext.request.contextPath}/TransactionConfirmation.jsp'">Confirm</button></td>
+					<td colspan='2'style="text-align:center"><button  class="nav_button" onclick="javascript:BookIt();">Confirm</button></td>
 				</tr>
 							<tr>
-					<td colspan='2' style="text-align:center"><button onclick="location.href='${pageContext.request.contextPath}/FlightSearchQuery.jsp'">Cancel</button></td>
+					<td colspan='2' style="text-align:center"><button  class="nav_button"  onclick="location.href='FlightSearchQuery.jsp'">Cancel</button></td>
 				</tr>
 			</table>
 		</div>
@@ -107,8 +149,30 @@ if(user == null) {
 </tr>
 </table>
 	<script>
-var UserName= "<%=user %>"
+var UserName= "<%=user %>";
 	ShowUsername(UserName);
+	
+var json = '<%=details %>';
+
+$( document ).ready(function() {
+	details = JSON.parse(json);
+	if(!details.bSuccess){
+		$("#detailsOut").html(details.sMessage);
+	} else {
+		
+		$("#flightid").html(details.id);
+		$("#operator").html(details.operator);
+		$("#source").html(details.source);
+		$("#destination").html(details.destination);
+		$("#departure").html(details.departure);
+		$("#arrival").html(details.arrival);
+		$("#cost").html(details.cost);
+		$("#seats").html(details.seats);
+		$("#stops").html(details.stops);
+	}
+	
+});
+
 </script>
 </body>
 </html>

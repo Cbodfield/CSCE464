@@ -11,8 +11,38 @@
 </head>
 <script>
 	function selectFlight(){
-		
-		location.href='Transaction.jsp';
+		var cost = $("#cost").html();
+		cost = cost.replace("$","");
+		var seats = $("#seatcount").val();
+		var flightid=$("#flightnumber").html();
+		var c = $("#class").val();
+		var stops = $("#stops").html();
+		var newForm = jQuery('<form>', {
+	        'action': 'ViewAndBook',
+	        'method':'POST',
+	    }).append(jQuery('<input>', {
+	        'name': 'flightid',
+	        'value': flightid,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'class',
+	        'value': c,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'cost',
+	        'value': cost,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'stops',
+	        'value': stops,
+	        'type': 'hidden'
+	    })).append(jQuery('<input>', {
+	        'name': 'seats',
+	        'value': seats,
+	        'type': 'hidden'
+	    }));
+	    
+	    newForm.submit();
 	}
 </script>
 <body>
@@ -56,6 +86,7 @@ details = String.valueOf(request.getAttribute("details"));
 	<td id=content valign="top" align="middle">
 		<span id=welcome><h1>View and Book</h1></span>
 		<div>
+		
 			<table>
 				<tr>
 					<td>Flight Number</td>
@@ -84,7 +115,7 @@ details = String.valueOf(request.getAttribute("details"));
 				<tr>
 					<td>Seats</td>
 					<td>
-						<select>
+						<select id="seatcount">
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
@@ -92,8 +123,19 @@ details = String.valueOf(request.getAttribute("details"));
 							<option value="5">5</option>
 							<option value="6">6</option>
 							<option value="7">7</option>
-							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Class</td>
+					<td>
+						<select id="class" name="class">
+						<option value="economy">Economy</option>
+						<option value="business">Business</option>
+						<option value="first">First Class</option>
+					</select>
 					</td>
 				</tr>
 				<tr>
@@ -107,6 +149,7 @@ details = String.valueOf(request.getAttribute("details"));
 					</td>
 				</tr>
 			</table>
+		
 		</div>
 	</td>
 </tr>

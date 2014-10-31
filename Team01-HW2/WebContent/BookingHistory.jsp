@@ -8,6 +8,45 @@
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<script>
+	$( document ).ready(function() {
+		$.post('BookingHistory',
+		{},
+		function(json) { 
+                      if(json.indexOf("failed") >-1){
+                      	//fail
+                      	alert("Error");
+                     	} else {
+                     		json = JSON.parse(json);
+                     		var wehaverowsbaby=false;
+                     		var html = "";
+                     		var count = 0;
+                     		html+="<table class='resultsTable'><tr><th>Booking Date</th><th>Booking ID</th><th>Flight ID</th><th>Number of Seats</th><th>Total Cost</th></tr>";
+                     		for (var i in json) {
+                     			  if (json.hasOwnProperty(i)) {
+                     				  wehaverowsbaby=true;
+                     				    //alert(key + " -> " + JSONFlights[key]);
+                     				    html+="<tr><td>" + json[i].date + "</td>";
+                     				    html+="<td>" + json[i].id + "</td>";
+                     				    html+="<td>" + json[i].flightid + "</td>";
+                     				    html+="<td>" + json[i].seats + "</td>";
+                     				    html+="<td style='color:green'><b>$" + json[i].cost + "</b></td>";
+                     				   
+                     				    count++;
+                     			  }
+                     			}
+                     		html+="</table>";
+                     		if(!wehaverowsbaby){
+                     			html="<h5>No Flight History</h5>";
+                     		}
+                     		$("#count").html("Number of flights: " +count);
+                     		$("#detailsOut").html(html);                   		
+                      }
+                               
+                   });	
+	});
+	
+	</script>
 </head>
 
 <body>
@@ -49,52 +88,10 @@ if(user == null) {
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Welcome to FlightSearch.Com</h1></span>
-		<div>
-			<table class="bottomBorder">
-				<thead>
-					<tr>
-						<td>Flight Date</td>
-						<td>Departure Time</td>
-						<td>Arrival Time</td>
-						<td>Number of Stops</td>
-						<td>Cost</td>
-						<td>Ticket Number</td>
-					</tr>
-				</thead>		
-				<tr>
-					<td>08/19/2014</td>
-					<td>13:00</td>
-					<td>15:30</td>
-					<td>1</td>
-					<td>$200.00</td>
-					<td>A1W3WS</td>
-				</tr>
-				<tr>
-					<td>02/23/2015</td>
-					<td>07:00</td>
-					<td>11:15</td>
-					<td>3</td>
-					<td>$415.35</td>
-					<td>JMOD9861</td>
-				</tr>
-				<tr>
-					<td>06/02/2015</td>
-					<td>17:00</td>
-					<td>20:50</td>
-					<td>2</td>
-					<td>$307.94.00</td>
-					<td>9534A13R</td>
-				</tr>
-				<tr>
-					<td>12/11/2013</td>
-					<td>11:00</td>
-					<td>18:320</td>
-					<td>5</td>
-					<td>$1098.11</td>
-					<td>9AG48AZN</td>
-				</tr>			
-			</table> 
+		<span id=welcome><h1>Booking History</h1></span>
+		<span id="count"></span>
+		<div id="detailsOut">
+			
 		</div>
 	</td>
 </tr>
@@ -102,6 +99,8 @@ if(user == null) {
 <script>
 var UserName= "<%=user %>"
 	ShowUsername(UserName);
+	
+	
 </script>
 </body>
 </html>

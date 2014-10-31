@@ -37,6 +37,7 @@ public class UserUtils {
     		propFilePath = c.getRealPath("/user.properties");
     	    fis = new FileInputStream(propFilePath);
 
+    	    //p.load(fis);
     	    p.load(fis);
 
     	

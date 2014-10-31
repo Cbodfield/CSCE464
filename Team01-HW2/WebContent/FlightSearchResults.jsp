@@ -13,7 +13,6 @@
 		
 		//round about hacky way to implement a submit form....
 		
-		
 		    var newForm = jQuery('<form>', {
 		        'action': 'FlightSearchResults',
 		        'method':'POST'

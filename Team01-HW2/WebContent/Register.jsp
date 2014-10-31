@@ -54,23 +54,7 @@ if(userName != null) {
 		<td align="center" colspan=2>
 		<span id=registration><h1>Registration</h1></span>
 		</td>
-		</tr>
-			<tr>
-				<td align="right">
-				First name:
-				</td>
-				<td>
-				<input type="text" id="firstname"/>
-				</td>
-			</tr>
-			<tr>
-				<td align="right">
-				Last name:
-				</td>
-				<td>
-				<input type="text" id="lastname"/>
-				</td>
-			</tr>
+		
 			<tr>
 			<td colspan=2>
 			<hr>
@@ -102,7 +86,7 @@ if(userName != null) {
 				Password:
 				</td>
 				<td>
-				<input type="text" id="1password"/>
+				<input type="password" id="1password"/>
 				</td>
 			</tr>
 			<tr>
@@ -110,7 +94,7 @@ if(userName != null) {
 				Retype Password:
 				</td>
 				<td>
-				<input type="text" id="dpassword"/>
+				<input type="password" id="dpassword"/>
 				</td>
 			</tr>
 			<tr>

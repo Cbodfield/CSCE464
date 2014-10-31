@@ -20,7 +20,7 @@ import classes.UserUtils;
  */
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	int nUser_id = -1;
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -100,9 +100,12 @@ public class Login extends HttpServlet {
 		boolean result = LoginUserDB(sqlParam);
 
 		if (result){
-		return "true";
+			HttpSession session = req.getSession();
+			session.setAttribute("userid", nUser_id );
+			session.setMaxInactiveInterval(30 * 60);
+			return "true";
 		}else {
-		return "false";
+			return "false";
 		}
 
 		}
@@ -114,7 +117,7 @@ public class Login extends HttpServlet {
 			String query = "SELECT user_id FROM users WHERE email = ? AND password = ?;";
 	
 			ResultSet rs = (ResultSet) jdbc.queryDB(query, sqlParam);
-			int nUser_id = -1;
+			
 	
 			if (rs != null) {
 			try {
