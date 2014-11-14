@@ -1,13 +1,14 @@
 function login(){
 	var username = $("#username").val();
 	var password = $("#password").val();
+	var remember = $("#remember").is(":checked")
 	if(username.trim()=="" || password.trim()==""){
 	//error out
 	alert("Username and Password cannot be blank");
 	return;
 	}
 	$.post('Login',
-			{type:"login",user:username, pass:password},
+			{type:"login",user:username, pass:password, checked:remember},
 			function(data) { 
                        if(data.indexOf("failed") >-1){
                        	//fail

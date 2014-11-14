@@ -50,6 +50,7 @@ public class Login extends HttpServlet {
 
 		if (!request.getParameter("type").toString().trim().equals("")) {
 			type = request.getParameter("type").toString();
+			boolean remember = Boolean.valueOf(request.getParameter("checked"));
 			if (type.equalsIgnoreCase("login")) {
 
 				valid = LoginUser(request, response);
@@ -61,9 +62,25 @@ public class Login extends HttpServlet {
 					// Successful login
 					Cookie loginCookie = new Cookie("user",
 					request.getParameter("user"));
+					if(remember){
+						Cookie email = new Cookie("email",request.getParameter("user"));
+						Cookie password = new Cookie("password",request.getParameter("pass"));
+						email.setMaxAge(30 * 24 * 3600);
+						password.setMaxAge(30 * 24 * 3600);
+						response.addCookie(email);
+						response.addCookie(password);
+					} else {
+						Cookie email = new Cookie("email",request.getParameter("user"));
+						Cookie password = new Cookie("password",request.getParameter("pass"));
+						email.setMaxAge(0);
+						password.setMaxAge(0);
+						response.addCookie(email);
+						response.addCookie(password);
+					}
 					// setting cookie to expiry in 30 mins
 					loginCookie.setMaxAge(30 * 60);
 					response.addCookie(loginCookie);
+					
 					response.getWriter().write("FlightSearchQuery.jsp");
 
 				} else {
