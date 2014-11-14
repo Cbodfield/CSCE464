@@ -19,6 +19,24 @@ if(userName != null) {
 	//We are logged in, lets get them home!
 	response.sendRedirect("FlightSearchQuery.jsp");
 }
+Cookie cookie = null;
+Cookie[] cookies = null;
+// Get an array of Cookies associated with this domain
+cookies = request.getCookies();
+
+String email ="";
+String password="";
+if( cookies != null ){
+   for (int i = 0; i < cookies.length; i++){
+          cookie = cookies[i];
+          if(cookie.getName().equalsIgnoreCase("email")){
+        	  email=cookie.getValue();
+          }
+          if(cookie.getName().equalsIgnoreCase("password")){
+        	  password=cookie.getValue();
+          }
+   }
+}
 %>
 
 <table id=global_table border=0>
@@ -34,9 +52,10 @@ if(userName != null) {
 					<input width="100%" type="text" placeholder="Username" id="username"/>
 					<input width="100%" type="password" placeholder="Password" id="password"/>	
 					<br><br>
+					<input type="checkbox" id="remember"/>Remember Me<br><br>
 					<a href="javascript:login();" class="" width="50%">Login</a>
-					<a href="Register.jsp;" class="" width="50%">Register</a>
-					
+					<a href="Register.jsp;" class="" width="50%">Register</a><br>
+									
 				</div>
 					
 			</td></tr>
@@ -57,6 +76,13 @@ if(userName != null) {
 <script>
 var UserName= "<%=userName %>"
 ShowUsername(UserName);
+var email= "<%=email %>"
+var password= "<%=password %>"
+if(password !="" &&email !=""){
+	$("#remember").click();
+	$("#username").val(email);
+	$("#password").val(password);
+}
 </script>
 </body>
 </html>

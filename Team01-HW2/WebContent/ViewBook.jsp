@@ -44,6 +44,10 @@
 	    
 	    newForm.submit();
 	}
+	
+	function addToCart(){
+		
+	}
 </script>
 <body>
 <%
@@ -55,7 +59,7 @@ if(user == null) {
 	response.sendRedirect("Login.jsp");
 }
 
-details = String.valueOf(request.getAttribute("details"));
+	details = String.valueOf(request.getAttribute("details"));
 %>
 <table id=global_table border=0>
 <tr>
@@ -140,12 +144,22 @@ details = String.valueOf(request.getAttribute("details"));
 				</tr>
 				<tr>
 					<td colspan='2'style="text-align:center">
-					<button class='nav_button'  onclick="selectFlight()">Select</button>
+					<button class='nav_button'  onclick="selectFlight()">Check Out</button>
 					</td>
 				</tr>
 				<tr>
 					<td colspan='2' style="text-align:center">
-					<button class='nav_button'  onclick="javascript:window.history.back()">Return</button>
+					<button class='nav_button'  onclick="addToCart()">Add to Cart</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan='2' style="text-align:center">
+					<button class='nav_button'  onclick="javascript:window.history.back()">Back to search results</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan='2' style="text-align:center">
+					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp'">Search for new flights</button>
 					</td>
 				</tr>
 			</table>
