@@ -68,20 +68,25 @@ var UserName= "<%=user %>"
 	
 var json = '<%= flights %>';
 $( document ).ready(function() {
-	var html = "<table class='resultsTable'><tr><th>Flight Number</th><th>Source</th><th>Destination</th><th>Departure Time</th><th>Arrival Time</th><th># Of Stops</th><th>Seats</th><th>Cost</th></tr>";
+	var html = "<table class='resultsTable'><tr><th>Flight Number</th><th>Operator</th><th>Source</th><th>Destination</th><th>Departure Time</th><th>Arrival Time</th><th>Seats</th><th>Cost</th></tr>";
 	var total= 0;
 	for (var i in json) {
+	//id,operator,source,destination,departure,arrival,arrival,seats,cost
 		  if (json.hasOwnProperty(i)) {
 			    //alert(key + " -> " + JSONFlights[key]);
-			    html+="<tr><td>" + json[i].flightID + "</td>";
-			    html+="<td>" + json[i].departuretime + "</td>";
-			    html+="<td>" + json[i].arrivaltime + "</td>";
-			    html+="<td>" + json[i].stops + "</td>";
-			    html+="<td style='color:green'><b>$" + json[i].cost + "</b></td>";
-			    html+="<td align='center'><a href='javascript:ViewAndBook("+json[i].flightID+","+json[i].cost+","+json[i].stops+");'>Select</a></td></tr>";
-			    count++;
+			    html+="<tr><td>"+json[i].id+"</td>";
+			    html+="<td>"+json[i].operator+"</td>";
+			    html+="<td>"+json[i].source+"</td>";
+			    html+="<td>"+json[i].destination+"</td>";
+			    html+="<td>"+json[i].departure+"</td>";
+			    html+="<td>"+json[i].arrival+"</td>";
+			    html+="<td>"+json[i].seats+"</td>";
+			    html+="<td>"+json[i].cost+"</td></tr>";
+			    total+= parseInt(json[i].cost);
 		  }
+	
 		}
+	html+="</table>";
 });
 </script>
 </body>
