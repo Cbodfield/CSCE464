@@ -57,8 +57,23 @@ String flights = String.valueOf(request.getAttribute("flights"));
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Your shopping cart</h1></span>
-		
+		<span id=welcome><h1>Your shopping cart</h1></span><span id="totalcost"></span>
+		<div id="htmlout">
+			
+		</div>
+		<table>
+		<tr>
+				<td colspan='2'style="text-align:center">
+					<button class='nav_button'  onclick="checkOut()">Check Out</button>
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan='2' style="text-align:center">
+					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp'">Search for new flights</button>
+					</td>
+				</tr>
+		</table>
 	</td>
 </tr>
 </table>
@@ -87,6 +102,9 @@ $( document ).ready(function() {
 	
 		}
 	html+="</table>";
+	$("#htmlout").html(html);
+	$("#totalcost").html(String(total));
+	
 });
 </script>
 </body>
