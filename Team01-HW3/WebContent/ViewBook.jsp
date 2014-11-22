@@ -45,8 +45,35 @@
 	    newForm.submit();
 	}
 	
+	function goToCart(){
+		//
+		var newForm = jQuery('<form>', {
+	        'action': 'ShoppingCart',
+	        'method':'POST',
+	    }).append(jQuery('<input>', {
+	        'name': 'action',
+	        'value': 'get',
+	        'type': 'hidden'
+	    }));
+	    
+	    newForm.submit();
+	}
+	
 	function addToCart(){
-		
+		$.post('ShoppingCart',
+				{"action":"add",
+				 "flightID":$("#flightnumber").html(), 
+				 "seats":$("#seatcount").val(), 
+				 "cost":$("#cost").html()},
+				function(data) { 
+	                       if(data.indexOf("good")>-1){
+	                    	   //it was added
+	                    	   alert("Successfully added to shopping cart");
+	                       } else {
+	           					alert(data);
+	                       }
+	                                
+	                    });
 	}
 </script>
 <body>
@@ -144,7 +171,7 @@ if(user == null) {
 				</tr>
 				<tr>
 					<td colspan='2'style="text-align:center">
-					<button class='nav_button'  onclick="selectFlight()">Check Out</button>
+					<button class='nav_button'  onclick="goToCart()">Check Out</button>
 					</td>
 				</tr>
 				<tr>
