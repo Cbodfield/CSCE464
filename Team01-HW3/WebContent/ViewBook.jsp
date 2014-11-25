@@ -110,6 +110,7 @@ if(user == null) {
 			<tr><td><hr/></td></tr>
 			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
 			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
+			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>
 				
 		</table>
 		

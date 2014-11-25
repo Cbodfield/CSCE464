@@ -13,9 +13,29 @@
 	<link href="Resources/jquery-ui.theme.css" rel="stylesheet" type="text/css">
 	
 	<script>
-	$( document ).ready(function() {
+	function goToCart(){
+		//
+		var newForm = jQuery('<form>', {
+	        'action': 'ShoppingCart',
+	        'method':'POST',
+	    }).append(jQuery('<input>', {
+	        'name': 'action',
+	        'value': 'get',
+	        'type': 'hidden'
+	    }));
+	    
+	    newForm.submit();
+	}
+	
+	function checkOut(){
 		
-	});
+		var newForm = jQuery('<form>', {
+	        'action': 'ViewAndBook',
+	        'method':'POST',
+	    });
+	    
+	    newForm.submit();
+	}
 	</script>
 </head>
 <body>
@@ -52,27 +72,27 @@ String flights = String.valueOf(request.getAttribute("flights"));
 			<tr><td><hr/></td></tr>
 			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
 			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
-				
+			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>
 		</table>
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Your shopping cart</h1></span><span id="totalcost"></span>
+		<span id=welcome><h1>Your shopping cart</h1></span>Total Cost: <span id="totalcost"></span>
 		<div id="htmlout">
 			
 		</div>
 		<table>
 		<tr>
-				<td colspan='2'style="text-align:center">
-					<button class='nav_button'  onclick="checkOut()">Check Out</button>
-					</td>
-				</tr>
+			<td colspan='2'style="text-align:center">
+				<button class='nav_button'  onclick="checkOut()">Check Out</button>
+			</td>
+		</tr>
 				
-				<tr>
-					<td colspan='2' style="text-align:center">
-					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp'">Search for new flights</button>
-					</td>
-				</tr>
+			<tr>
+				<td colspan='2' style="text-align:center">
+					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp'">Continue Shopping</button>
+				</td>
+			</tr>
 		</table>
 	</td>
 </tr>
@@ -82,6 +102,7 @@ var UserName= "<%=user %>"
 	ShowUsername(UserName);
 	
 var json = '<%= flights %>';
+json=JSON.parse(json);
 $( document ).ready(function() {
 	var html = "<table class='resultsTable'><tr><th>Flight Number</th><th>Operator</th><th>Source</th><th>Destination</th><th>Departure Time</th><th>Arrival Time</th><th>Seats</th><th>Cost</th></tr>";
 	var total= 0;

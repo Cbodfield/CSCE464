@@ -65,7 +65,7 @@ public class ShoppingCart extends HttpServlet {
 			String flightID = request.getParameter("flightID");
 			String seats = request.getParameter("seats");
 			String cost = request.getParameter("cost");
-			
+			cost = String.valueOf(Integer.valueOf(cost) * Integer.valueOf(seats));
 			
 			//Now iterate through the list to make sure the 
 			//flight isn't already added

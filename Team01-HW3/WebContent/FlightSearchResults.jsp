@@ -31,6 +31,20 @@
 		    }));
 		    newForm.submit();
 	}
+	
+	function goToCart(){
+		//
+		var newForm = jQuery('<form>', {
+	        'action': 'ShoppingCart',
+	        'method':'POST',
+	    }).append(jQuery('<input>', {
+	        'name': 'action',
+	        'value': 'get',
+	        'type': 'hidden'
+	    }));
+	    
+	    newForm.submit();
+	}
 	</script>
 </head>
 <body>
@@ -68,7 +82,7 @@ String sJSONFlights = String.valueOf(request.getAttribute("flights"));
 			<tr><td><hr/></td></tr>
 			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
 			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
-				
+			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>	
 		</table>
 		
 	</td>
