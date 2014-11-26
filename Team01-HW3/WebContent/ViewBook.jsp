@@ -64,7 +64,8 @@
 				{"action":"add",
 				 "flightID":$("#flightnumber").html(), 
 				 "seats":$("#seatcount").val(), 
-				 "cost":$("#cost").html()},
+				 "cost":$("#cost").html(),
+				 "class":$("#class").val()},
 				function(data) { 
 	                       if(data.indexOf("good")>-1){
 	                    	   //it was added

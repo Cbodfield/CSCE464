@@ -27,15 +27,7 @@
 	    newForm.submit();
 	}
 	
-	function checkOut(){
-		
-		var newForm = jQuery('<form>', {
-	        'action': 'ViewAndBook',
-	        'method':'POST',
-	    });
-	    
-	    newForm.submit();
-	}
+	
 	</script>
 </head>
 <body>
@@ -77,14 +69,14 @@ String flights = String.valueOf(request.getAttribute("flights"));
 		
 	</td>
 	<td id=content valign="top" align="middle">
-		<span id=welcome><h1>Your shopping cart</h1></span>Total Cost: <span id="totalcost"></span>
+		<span id=welcome><h1>Your shopping cart</h1></span><span id="totalcost"></span>
 		<div id="htmlout">
 			
 		</div>
 		<table>
 		<tr>
 			<td colspan='2'style="text-align:center">
-				<button class='nav_button'  onclick="checkOut()">Check Out</button>
+				<button id="btnCheckOut" class='nav_button'  onclick="checkOut()">Check Out</button>
 			</td>
 		</tr>
 				
@@ -102,10 +94,15 @@ var UserName= "<%=user %>"
 	ShowUsername(UserName);
 	
 var json = '<%= flights %>';
-json=JSON.parse(json);
+var originalJSON = json;
+if(json != ""){
+	json=JSON.parse(json);
+}
 $( document ).ready(function() {
-	var html = "<table class='resultsTable'><tr><th>Flight Number</th><th>Operator</th><th>Source</th><th>Destination</th><th>Departure Time</th><th>Arrival Time</th><th>Seats</th><th>Cost</th></tr>";
+	if(json !=""){
+	var html = "<table class='resultsTable'><tr><th>Flight Number</th><th>Operator</th><th>Source</th><th>Destination</th><th>Departure Time</th><th>Arrival Time</th><th>Seats</th><th>Seat Type</th><th>Cost</th></tr>";
 	var total= 0;
+	
 	for (var i in json) {
 	//id,operator,source,destination,departure,arrival,arrival,seats,cost
 		  if (json.hasOwnProperty(i)) {
@@ -117,6 +114,7 @@ $( document ).ready(function() {
 			    html+="<td>"+json[i].departure+"</td>";
 			    html+="<td>"+json[i].arrival+"</td>";
 			    html+="<td>"+json[i].seats+"</td>";
+			    html+="<td>"+json[i].seatType+"</td>";
 			    html+="<td>"+json[i].cost+"</td></tr>";
 			    total+= parseInt(json[i].cost);
 		  }
@@ -124,9 +122,28 @@ $( document ).ready(function() {
 		}
 	html+="</table>";
 	$("#htmlout").html(html);
-	$("#totalcost").html(String(total));
+	$("#totalcost").html("Total Cost: " + String(total));
+	} else {
+		$("#btnCheckOut").hide();
+		$("#totalcost").html("No flights have been added to your cart");
+	}
+	
 	
 });
+
+function checkOut(){
+	//
+	var newForm = jQuery('<form>', {
+        'action': 'ViewAndBook',
+        'method':'POST',
+    }).append(jQuery('<input>', {
+        'name': 'flightInfo',
+        'value': originalJSON,
+        'type': 'hidden'
+    }));
+    
+    newForm.submit();
+}
 </script>
 </body>
 </html>

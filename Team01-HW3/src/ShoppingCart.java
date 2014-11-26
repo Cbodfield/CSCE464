@@ -64,7 +64,8 @@ public class ShoppingCart extends HttpServlet {
 			//ADDING TO THE SHOPPING CART
 			String flightID = request.getParameter("flightID");
 			String seats = request.getParameter("seats");
-			String cost = request.getParameter("cost");
+			String cost = request.getParameter("cost").replace("$", "");
+			String seatType= request.getParameter("class");
 			cost = String.valueOf(Integer.valueOf(cost) * Integer.valueOf(seats));
 			
 			//Now iterate through the list to make sure the 
@@ -73,10 +74,10 @@ public class ShoppingCart extends HttpServlet {
 			if(!cartList.contains(flightID)){
 				if(!cartList.trim().equals("") && cookieFound){
 					//It exists, now add to it
-					cartList +="="+flightID+","+seats+","+cost;
+					cartList +="="+flightID+","+seats+","+cost+","+seatType;
 				} else {
 					//Doesn't exit, make one
-					cartList =flightID+","+seats+","+cost;
+					cartList =flightID+","+seats+","+cost+","+seatType;
 				}
 				
 				Cookie cCartList = new Cookie(userid + "LIST",cartList);
@@ -86,12 +87,17 @@ public class ShoppingCart extends HttpServlet {
 			} else {
 				response.getWriter().write("Already Added");
 			}
-		} else if(action.equals("get")){
-			String jsonifiedFlights = GetShoppingCartFlights(cartList);
-			request.setAttribute("flights", jsonifiedFlights);
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/ShoppingCart.jsp");
-			rd.forward(request, response);
-			
+		} else if(action.equals("get") ){
+			if(cartList.trim().equals("")){
+				request.setAttribute("flights", "");
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ShoppingCart.jsp");
+				rd.forward(request, response);
+			} else {
+				String jsonifiedFlights = GetShoppingCartFlights(cartList);
+				request.setAttribute("flights", jsonifiedFlights);
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ShoppingCart.jsp");
+				rd.forward(request, response);
+			}
 		}
 		
 	}
@@ -105,6 +111,7 @@ public class ShoppingCart extends HttpServlet {
 			String id=params[0];
 			String seats = params[1];
 			String cost = params[2].replace("$", "");
+			String seatType = params[3];
 			
 			ArrayList<Object> sqlParam = new ArrayList<Object>();	
 			
@@ -131,6 +138,7 @@ public class ShoppingCart extends HttpServlet {
 						details.put("arrival",String.valueOf(rs.getObject("arrival")));
 						details.put("cost",cost);
 						details.put("seats",seats);
+						details.put("seatType", seatType);
 					}
 				} catch (SQLException e){
 					
