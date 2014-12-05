@@ -1,0 +1,65 @@
+function login(){
+	var username = $("#username").val();
+	var password = $("#password").val();
+	var remember = $("#remember").is(":checked")
+	if(username.trim()=="" || password.trim()==""){
+	//error out
+	alert("Username and Password cannot be blank");
+	return;
+	}
+	$.post('Login',
+			{type:"login",user:username, pass:password, checked:remember},
+			function(data) { 
+                       if(data.indexOf("failed") >-1){
+                       	//fail
+                       	alert("Failed Login");
+                      	} else {
+                       	//success
+                      	 window.location = data;
+                       }
+                                
+                    });
+}
+
+function register(){
+	var username = $("#1username").val();
+	var password = $("#1password").val();
+	var username2 = $("#dusername").val();
+	var password2 = $("#dpassword").val();
+	if(username!=username2 || username.trim()=="" || username2.trim() == ""){
+	//error out
+	alert("Usernames cannot be blank and must match");
+	return;
+	}
+	if(password!=password2 || password.trim()=="" || password2.trim() == ""){
+	//error out
+	alert("Passwords cannot be blank and must match");
+	return;
+	}
+	$.post('Registration',{type:"register",user:username, pass:password},function(data) { 
+      
+       if(data.indexOf("failed") >-1){
+       //bad registration
+       	alert("Registration has failed");
+       } else {
+       //good registration
+       	window.location = data;
+       }
+                
+    });
+}
+
+function ShowUsername(user){
+if(user.trim() != "" && user != null && user !="null"){
+	$("#login_username").html("Welcome <b>" +user +"!</b><br><a style='width:150px' href='javascript:logout()'>Logout</a>");
+	}
+}
+
+function logout(){
+
+	$.post('Login',{type:"logout"},function(data) { 
+                     
+                     window.location = data;
+                                
+                    });
+}
