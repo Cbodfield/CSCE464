@@ -26,6 +26,10 @@ function register(){
 	var password = $("#1password").val();
 	var username2 = $("#dusername").val();
 	var password2 = $("#dpassword").val();
+	var orgname = $("#organization").val();
+	var orgaddress = $("#address").val();
+	var firstName = $("#firstName").val();
+	var lastName = $("#lastName").val();
 	if(username!=username2 || username.trim()=="" || username2.trim() == ""){
 	//error out
 	alert("Usernames cannot be blank and must match");
@@ -36,7 +40,12 @@ function register(){
 	alert("Passwords cannot be blank and must match");
 	return;
 	}
-	$.post('Registration',{type:"register",user:username, pass:password},function(data) { 
+	if(firstName.trim()=="" || lastName.trim()==""){
+	//error out
+	alert("First and last name fields cannot be blank");
+	return;
+	}
+	$.post('Registration',{type:"register",user:username, pass:password, "organization":orgname, "address":orgaddress,"firstName":firstName,"lastName":lastName},function(data) { 
       
        if(data.indexOf("failed") >-1){
        //bad registration

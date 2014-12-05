@@ -59,7 +59,14 @@ public class Registration extends HttpServlet {
 			ArrayList<Object> params = new ArrayList<Object>();
 			params.add(req.getParameter("user"));
 			params.add(req.getParameter("pass"));
+			params.add(req.getParameter("firstName"));
+			params.add(req.getParameter("lastName"));
 			
+			String org = req.getParameter("organization");
+			String address = req.getParameter("address");
+						
+			String orgID = GetOrganization(org,address);
+			params.add(orgID);
 			boolean result = RegisterUserDB(params);
 			
 			if (result){
@@ -76,7 +83,7 @@ public class Registration extends HttpServlet {
 	public boolean RegisterUserDB(ArrayList<Object> sqlParam){
 		JDBCHelper jdbc = new JDBCHelper();
 		jdbc.connectToTeamDB();
-		String query = "INSERT INTO users (email, password) VALUES(?, ?);";
+		String query = "INSERT INTO users (email, password, first_name, last_name, organization_id) VALUES(?, ?, ?, ?, ?);";
 
 		int returnedKey = jdbc.insertDB(query, sqlParam);
 		jdbc.closeConnection();
@@ -84,7 +91,7 @@ public class Registration extends HttpServlet {
 		if ((returnedKey == -1) || (returnedKey == 0)){
 			return false;
 		}else {
-			if (CreateAccount(sqlParam)){
+			if (CreateAccount(String.valueOf(returnedKey))){
 				return true;
 			}else{
 				return false;	
@@ -92,11 +99,11 @@ public class Registration extends HttpServlet {
 		}
 	}
 	
-	public boolean CreateAccount(ArrayList<Object> sqlParam){
+	public boolean CreateAccount(String userid){
 		JDBCHelper jdbc = new JDBCHelper();
 		jdbc.connectToTeamDB();
 		
-		String userid = GetUserID(sqlParam);
+		//String userid = GetUserID(sqlParam);
 		String query = "INSERT INTO accounts (holder_id, routing_number, balance) VALUES(?, ?, ?);";
 
 		ArrayList<Object> sql = new ArrayList<Object>();
@@ -114,29 +121,65 @@ public class Registration extends HttpServlet {
 		}
 	}
 	
-	public String GetUserID(ArrayList<Object> sqlParam){
+	
+	public String GetOrganization(String organization, String address){
+		
+		if (organization.equals("")){
+			//Returns 1 which is the row with the default organization in the database
+			return "1";
+		}
+		
+		if (address.equals("")){
+			address = "1234 Main Street, Lincoln NE";
+		}
+		
+		ArrayList<Object> sqlParam = new ArrayList<Object>();
+		sqlParam.add(organization);
+		sqlParam.add(address);
+		
+		//Check if organization exists
+		String checkedOrgID = CheckOrganization(sqlParam);
+		
+		if (checkedOrgID.equals("")){
+			//Doesn't exist, add it
+			return AddOrganization(sqlParam);
+		}else{
+			return checkedOrgID;
+		}
+	}
+	
+	public String CheckOrganization(ArrayList<Object> sqlParam){
 		JDBCHelper jdbc = new JDBCHelper();
 		jdbc.connectToTeamDB();
-		String query = "SELECT user_id FROM users WHERE email = ? AND password = ?;";
+		String query = "SELECT organization_id FROM organization WHERE name = ? AND address = ?;";
 		int n;
 		ResultSet rs = (ResultSet) jdbc.queryDB(query, sqlParam);
 		
-
 		if (rs != null) {
-		try {
-		if (rs.next()){
-			n = rs.getInt("user_id");
-			jdbc.closeConnection();
-			return String.valueOf(n);
-		}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return "";
-		}
+			try {
+				if (rs.next()){
+					n = rs.getInt("organization_id");
+					jdbc.closeConnection();
+					return String.valueOf(n);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return "";
+			}
 		}
 		return "";
-}
+	}
 	
-	
+	public String AddOrganization(ArrayList<Object> sqlParam){
+		JDBCHelper jdbc = new JDBCHelper();
+		jdbc.connectToTeamDB();
+		
+		String query = "INSERT INTO organization (name, address) VALUES(?, ?);";
+		
+		int returnedKey = jdbc.insertDB(query, sqlParam);
+		jdbc.closeConnection();
+						
+		return String.valueOf(returnedKey);
+	}
 	
 }

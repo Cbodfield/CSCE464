@@ -159,9 +159,10 @@ public class JDBCHelper {
 	
 	public int insertDB(String query, ArrayList<Object> sqlParam){
 		int rowsAffected;
+		int generatedKey = 0;
+		
 		try{
 			this.ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-
 						
 			int i = 1;
 			for (Object a : sqlParam){
@@ -182,11 +183,20 @@ public class JDBCHelper {
 				i++;
 			}
 			rowsAffected = this.ps.executeUpdate();
+				
+			this.rs = this.ps.getGeneratedKeys();
+			if (this.rs != null && this.rs.next()) {
+			    generatedKey = this.rs.getInt(1);
+			}else {
+				//Default to rows affected just in case
+				//generatedKey = rowsAffected;
+			}
+			
 		}catch (SQLException e){
 			e.printStackTrace();
 			return -1;
 		}
-		return rowsAffected;
+		return generatedKey;
 	}
 	
 	 public int updateDB(String query, ArrayList<Object> sqlParam){

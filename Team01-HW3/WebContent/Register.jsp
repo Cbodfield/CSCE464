@@ -117,6 +117,48 @@ if( cookies != null ){
 				</td>
 			</tr>
 			<tr>
+			<td colspan=2>
+			<hr>
+			</td>
+			</tr>
+			<tr>
+				<td align="right">
+				First Name:
+				</td>
+				<td>
+				<input type="text" id="firstName"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+				Last Name:
+				</td>
+				<td>
+				<input type="text" id="lastName"/>
+				</td>
+			</tr>
+			<tr>
+			<td colspan=2>
+			<hr>
+			</td>
+			</tr>
+			<tr>
+				<td align="right">
+				Organization:
+				</td>
+				<td>
+				<input type="text" id="organization"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+				Organization Address:
+				</td>
+				<td>
+				<input type="text" id="address"/>
+				</td>
+			</tr>
+			<tr>
 				<td colspan=2 align="right">
 					<button onclick="javascript:register()">Register</button>
 				</td>
