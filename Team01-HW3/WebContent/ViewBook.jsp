@@ -8,6 +8,10 @@
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${empty sessionScope.client}">
+		<c:redirect url="Login.jsp"></c:redirect>
+	</c:if>
 </head>
 <script>
 	function selectFlight(){
@@ -18,7 +22,7 @@
 		var c = $("#class").val();
 		var stops = $("#stops").html();
 		var newForm = jQuery('<form>', {
-	        'action': 'ViewAndBook',
+	        'action': 'ViewAndBook;jsessionid=${pageContext.session.id}',
 	        'method':'POST',
 	    }).append(jQuery('<input>', {
 	        'name': 'flightid',
@@ -48,7 +52,7 @@
 	function goToCart(){
 		//
 		var newForm = jQuery('<form>', {
-	        'action': 'ShoppingCart',
+	        'action': 'ShoppingCart;jsessionid=${pageContext.session.id}',
 	        'method':'POST',
 	    }).append(jQuery('<input>', {
 	        'name': 'action',
@@ -60,7 +64,7 @@
 	}
 	
 	function addToCart(){
-		$.post('ShoppingCart',
+		$.post('ShoppingCart;jsessionid=${pageContext.session.id}',
 				{"action":"add",
 				 "flightID":$("#flightnumber").html(), 
 				 "seats":$("#seatcount").val(), 
@@ -78,17 +82,7 @@
 	}
 </script>
 <body>
-<%
-String user = null;
-String details = "";
-user = (String)session.getAttribute("user");
 
-if(user == null) {
-	response.sendRedirect("Login.jsp");
-}
-
-	details = String.valueOf(request.getAttribute("details"));
-%>
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
@@ -109,8 +103,8 @@ if(user == null) {
 			</td></tr>
 			
 			<tr><td><hr/></td></tr>
-			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
-			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
+			<tr><td><button onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}';" class="nav_button">Flight Search</button></td></tr>
+			<tr><td><button onclick="location.href='BookingHistory.jsp;jsessionid=${pageContext.session.id}';"  class="nav_button">Booking History</button></td></tr>
 			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>
 				
 		</table>
@@ -188,7 +182,7 @@ if(user == null) {
 				</tr>
 				<tr>
 					<td colspan='2' style="text-align:center">
-					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp'">Search for new flights</button>
+					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}'">Search for new flights</button>
 					</td>
 				</tr>
 			</table>
@@ -198,10 +192,11 @@ if(user == null) {
 </tr>
 </table>
 	<script>
-var UserName= "<%=user %>"
-	ShowUsername(UserName);
+	var Name = '<c:out value="${sessionScope.client.user.name}" />';
+	var Organization = '<c:out value="${sessionScope.client.organization.name}" />';
+		ShowUsername(Name,Organization);
 	
-var details = '<%=details %>';
+var details = '<c:out value="${sessionScope.details}"  escapeXml="false"/>';
 var json = JSON.parse(details);
 $( document ).ready(function() {
 	//$("#results").html(JSONFlights);

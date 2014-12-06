@@ -8,6 +8,10 @@
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${empty sessionScope.client}">
+		<c:redirect url="Login.jsp"></c:redirect>
+	</c:if>
 </head>
 <script>
 function goToCart(){
@@ -25,16 +29,7 @@ function goToCart(){
 }
 </script>
 <body>
-<%
-String user = null;
 
-user = (String)session.getAttribute("user");
-
-if(user == null) {
-	response.sendRedirect("Login.jsp");
-}
-String details = String.valueOf(request.getAttribute("details"));
-%>
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
@@ -97,10 +92,11 @@ String details = String.valueOf(request.getAttribute("details"));
 </tr>
 </table>
 <script>
-var UserName= "<%=user %>"
-	ShowUsername(UserName);
+var Name = '<c:out value="${sessionScope.client.user.name}" />';
+var Organization = '<c:out value="${sessionScope.client.organization.name}" />';
+	ShowUsername(Name,Organization);
 	
-var json = '<%=details %>';
+var json = '<c:out value="${sessionScop.details}"/>';
 $( document ).ready(function() {
 	details = JSON.parse(json);
 	var numberOfSeats  =0 ;

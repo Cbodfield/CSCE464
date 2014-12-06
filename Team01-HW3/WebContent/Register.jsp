@@ -8,37 +8,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Registration</title>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${not empty sessionScope.client}">
+		<c:redirect url="FlightSearchQuery.jsp"></c:redirect>
+	</c:if>
 </head>
 <body>
-
-<%
-String userName = null;
-
-userName = (String)session.getAttribute("user");
-
-if(userName != null) {
-	//We are logged in, lets get them home!
-	response.sendRedirect("FlightSearchQuery.jsp");
-}
-Cookie cookie = null;
-Cookie[] cookies = null;
-// Get an array of Cookies associated with this domain
-cookies = request.getCookies();
-
-String email ="";
-String password="";
-if( cookies != null ){
-   for (int i = 0; i < cookies.length; i++){
-          cookie = cookies[i];
-          if(cookie.getName().equalsIgnoreCase("email")){
-        	  email=cookie.getValue();
-          }
-          if(cookie.getName().equalsIgnoreCase("password")){
-        	  password=cookie.getValue();
-          }
-   }
-}
-%>
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
@@ -117,6 +92,48 @@ if( cookies != null ){
 				</td>
 			</tr>
 			<tr>
+			<td colspan=2>
+			<hr>
+			</td>
+			</tr>
+			<tr>
+				<td align="right">
+				First Name:
+				</td>
+				<td>
+				<input type="text" id="firstName"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+				Last Name:
+				</td>
+				<td>
+				<input type="text" id="lastName"/>
+				</td>
+			</tr>
+			<tr>
+			<td colspan=2>
+			<hr>
+			</td>
+			</tr>
+			<tr>
+				<td align="right">
+				Organization:
+				</td>
+				<td>
+				<input type="text" id="organization"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+				Organization Address:
+				</td>
+				<td>
+				<input type="text" id="address"/>
+				</td>
+			</tr>
+			<tr>
 				<td colspan=2 align="right">
 					<button onclick="javascript:register()">Register</button>
 				</td>
@@ -126,16 +143,5 @@ if( cookies != null ){
 	</td>
 </tr>
 </table>
-<script>
-var UserName= "<%=userName %>"
-ShowUsername(UserName);
-var email= "<%=email %>"
-var password= "<%=password %>"
-if(password !="" &&email !=""){
-	$("#remember").click();
-	$("#username").val(email);
-	$("#password").val(password);
-}
-</script>
 </body>
 </html>

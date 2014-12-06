@@ -11,12 +11,15 @@
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
 	<link href="Resources/jquery-ui.structure.css" rel="stylesheet" type="text/css">
 	<link href="Resources/jquery-ui.theme.css" rel="stylesheet" type="text/css">
-	
+	<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${empty sessionScope.client}">
+		<c:redirect url="Login.jsp"></c:redirect>
+	</c:if>
 	<script>
 	function goToCart(){
 		//
 		var newForm = jQuery('<form>', {
-	        'action': 'ShoppingCart',
+	        'action': 'ShoppingCart;jsessionid=${pageContext.session.id}',
 	        'method':'POST',
 	    }).append(jQuery('<input>', {
 	        'name': 'action',
@@ -31,17 +34,7 @@
 	</script>
 </head>
 <body>
-<%
-String user = null;
 
-user = (String)session.getAttribute("user");
-
-if(user == null) {
-	response.sendRedirect("Login.jsp");
-}
-
-String flights = String.valueOf(request.getAttribute("flights"));
-%>
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
@@ -62,8 +55,8 @@ String flights = String.valueOf(request.getAttribute("flights"));
 			</td></tr>
 			
 			<tr><td><hr/></td></tr>
-			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
-			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
+			<tr><td><button onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}';" class="nav_button">Flight Search</button></td></tr>
+			<tr><td><button onclick="location.href='BookingHistory.jsp;jsessionid=${pageContext.session.id}';"  class="nav_button">Booking History</button></td></tr>
 			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>
 		</table>
 		
@@ -82,7 +75,7 @@ String flights = String.valueOf(request.getAttribute("flights"));
 				
 			<tr>
 				<td colspan='2' style="text-align:center">
-					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp'">Continue Shopping</button>
+					<button class='nav_button'  onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}'">Continue Shopping</button>
 				</td>
 			</tr>
 		</table>
@@ -90,10 +83,11 @@ String flights = String.valueOf(request.getAttribute("flights"));
 </tr>
 </table>
 	<script>
-var UserName= "<%=user %>"
-	ShowUsername(UserName);
+	var Name = '<c:out value="${sessionScope.client.user.name}" />';
+	var Organization = '<c:out value="${sessionScope.client.organization.name}" />';
+		ShowUsername(Name,Organization);
 	
-var json = '<%= flights %>';
+var json = '<c:out value="${sessionScope.flights}" escapeXml="false"/>';
 var originalJSON = json;
 if(json != ""){
 	json=JSON.parse(json);
@@ -134,7 +128,7 @@ $( document ).ready(function() {
 function checkOut(){
 	//
 	var newForm = jQuery('<form>', {
-        'action': 'ViewAndBook',
+        'action': 'ViewAndBook;jsessionid=${pageContext.session.id}',
         'method':'POST',
     }).append(jQuery('<input>', {
         'name': 'flightInfo',

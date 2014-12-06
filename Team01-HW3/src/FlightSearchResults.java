@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,9 +52,11 @@ public class FlightSearchResults extends HttpServlet {
 		String stops = String.valueOf(request.getParameter("s"));
 		if( flightID != null){
 			JSONArray output = getFlightDetails(flightID, cost, stops);
-			request.setAttribute("details", output.toString());
+			//request.setAttribute("details", output.toString());
+			HttpSession session = request.getSession();
+			session.setAttribute("details", output.toString());
 			
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/ViewBook.jsp");
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/ViewBook.jsp;jsessionid="+session.getId());
 			rd.forward(request,response);
 		} else {
 			//error out????!?!??

@@ -8,6 +8,10 @@
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${empty sessionScope.client}">
+		<c:redirect url="Login.jsp"></c:redirect>
+	</c:if>
 	<script>
 	var globalFlightArray;
 	function good(t){
@@ -17,17 +21,19 @@
 		var accountnumber = $("#accountnumber").val();
 		var routingnumber = $("#routingnumber").val();
 		var cost = $("#realcost").val();
+		var pin = $("#pin").val();
 		if(good(cost) && good(routingnumber) && good(accountnumber)){
 		
 		
 		$.ajax
         ({
             type: "POST",
-            url: '../../Team01-Banking/Bank',
+            url: '../../Team01-Banking/Bank;jsessionid=${pageContext.session.id}',
             dataType: 'json',
             data:{"accountnumber":accountnumber,
-				 "routingnumber":routingnumber,
-				 "cost":cost},
+            	"routingnumber":routingnumber,
+            	"cost":cost,
+            	"pin":pin},
             success: function (data) {
         		if(!data.bSuccess){
         			alert(data.sMessage);
@@ -51,7 +57,7 @@
 		$.ajax
         ({
             type: "POST",
-            url: 'UpdateHistory',
+            url: 'UpdateHistory;jsessionid=${pageContext.session.id}',
             dataType: 'json',
             data:{"accountnumber":accountnumber,
 				 "flightid":flightid,
@@ -82,7 +88,7 @@
 	function goToCart(){
 		//
 		var newForm = jQuery('<form>', {
-	        'action': 'ShoppingCart',
+	        'action': 'ShoppingCart;jsessionid=${pageContext.session.id}',
 	        'method':'POST',
 	    }).append(jQuery('<input>', {
 	        'name': 'action',
@@ -95,17 +101,7 @@
 	</script>
 </head>
 <body>
-<%
-String user = null;
 
-user = (String)session.getAttribute("user");
-
-if(user == null) {
-	response.sendRedirect("Login.jsp");
-}
-
-String flights = String.valueOf(request.getAttribute("flights"));
-%>
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
@@ -126,8 +122,8 @@ String flights = String.valueOf(request.getAttribute("flights"));
 			</td></tr>
 			
 			<tr><td><hr/></td></tr>
-			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
-			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
+			<tr><td><button onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}';" class="nav_button">Flight Search</button></td></tr>
+			<tr><td><button onclick="location.href='BookingHistory.jsp;jsessionid=${pageContext.session.id}';"  class="nav_button">Booking History</button></td></tr>
 			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>	
 		</table>
 		
@@ -153,11 +149,16 @@ String flights = String.valueOf(request.getAttribute("flights"));
 					<td><input id="accountnumber" type="text"></td>
 				</tr>
 				<tr>
+					<td>PIN</td>
+					<td><input id="pin" type="text"></td>
+				</tr>
+				<tr>
 					<td colspan='2'style="text-align:center"><button  class="nav_button" id="confirm" onclick="javascript:confirm_function();">Confirm</button></td>
 				</tr>
 							<tr>
-					<td colspan='2' style="text-align:center"><button  class="nav_button"  onclick="location.href='FlightSearchQuery.jsp'">Cancel</button></td>
+					<td colspan='2' style="text-align:center"><button  class="nav_button"  onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}'">Cancel</button></td>
 				</tr>
+				 
 			</table>
 			
 			<center><A id="print" HREF="javascript:window.print()">Click to Print This Page</A></center>
@@ -166,10 +167,11 @@ String flights = String.valueOf(request.getAttribute("flights"));
 </tr>
 </table>
 	<script>
-var UserName= "<%=user %>";
-	ShowUsername(UserName);
+	var Name = '<c:out value="${sessionScope.client.user.name}" />';
+	var Organization = '<c:out value="${sessionScope.client.organization.name}" />';
+		ShowUsername(Name,Organization);
 	
-var json = '<%=flights %>';
+var json = '<c:out value="${sessionScope.flights}"  escapeXml="false"/>';
 
 function populatePage(flightArray){
 	var bigWrapper = ""; 

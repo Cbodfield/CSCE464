@@ -8,36 +8,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Home</title>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${not empty sessionScope.client}">
+		<c:redirect url="FlightSearchQuery.jsp"></c:redirect>
+	</c:if>
 </head>
 <body>
-<%
-String userName = null;
-
-userName = (String)session.getAttribute("user");
-
-if(userName != null) {
-	//We are logged in, lets get them home!
-	response.sendRedirect("FlightSearchQuery.jsp");
-}
-Cookie cookie = null;
-Cookie[] cookies = null;
-// Get an array of Cookies associated with this domain
-cookies = request.getCookies();
-
-String email ="";
-String password="";
-if( cookies != null ){
-   for (int i = 0; i < cookies.length; i++){
-          cookie = cookies[i];
-          if(cookie.getName().equalsIgnoreCase("email")){
-        	  email=cookie.getValue();
-          }
-          if(cookie.getName().equalsIgnoreCase("password")){
-        	  password=cookie.getValue();
-          }
-   }
-}
-%>
 
 <table id=global_table border=0>
 <tr>
@@ -52,9 +28,8 @@ if( cookies != null ){
 					<input width="100%" type="text" placeholder="Username" id="username"/>
 					<input width="100%" type="password" placeholder="Password" id="password"/>	
 					<br><br>
-					<input type="checkbox" id="remember"/>Remember Me<br><br>
 					<a href="javascript:login();" class="" width="50%">Login</a>
-					<a href="Register.jsp;" class="" width="50%">Register</a><br>
+					<a href="<c:url value='/Register.jsp' />" class="" width="50%">Register</a><br>
 									
 				</div>
 					
@@ -74,15 +49,6 @@ if( cookies != null ){
 </table>
 
 <script>
-var UserName= "<%=userName %>"
-ShowUsername(UserName);
-var email= "<%=email %>"
-var password= "<%=password %>"
-if(password !="" &&email !=""){
-	$("#remember").click();
-	$("#username").val(email);
-	$("#password").val(password);
-}
 </script>
 </body>
 </html>

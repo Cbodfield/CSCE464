@@ -10,6 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,18 +48,27 @@ public class ShoppingCart extends HttpServlet {
 		String action = request.getParameter("action");
 		//Getting the cookie associated with userid
 		String userid = String.valueOf(request.getSession().getAttribute("userid"));
-		Cookie[] cookies = request.getCookies();
-		Cookie cookie = null;
-		Boolean cookieFound = false;
 		String cartList = "";
-		if( cookies != null ){
-			   for (int i = 0; i < cookies.length; i++){
-			          cookie = cookies[i];
-			          if(cookie.getName().contains(userid + "LIST")){
-			        	  cartList=cookie.getValue();
-			        	  cookieFound=true;
-			          }
-			   }
+		Boolean found = false;
+//		
+//		if( cookies != null ){
+//			   for (int i = 0; i < cookies.length; i++){
+//			          cookie = cookies[i];
+//			          if(cookie.getName().contains(userid + "LIST")){
+//			        	  cartList=cookie.getValue();
+//			        	  cookieFound=true;
+//			          }
+//			   }
+//		}
+		
+		
+		Object o =request.getSession().getAttribute(userid + "LIST");
+		HttpSession session = request.getSession();
+		if(o != null && !String.valueOf(o).equals("")){
+			cartList = String.valueOf(o);
+			found=true;
+		} else {
+			cartList="";
 		}
 		if(action.equals("add")){
 			//ADDING TO THE SHOPPING CART
@@ -72,7 +82,7 @@ public class ShoppingCart extends HttpServlet {
 			//flight isn't already added
 			
 			if(!cartList.contains(flightID)){
-				if(!cartList.trim().equals("") && cookieFound){
+				if(!cartList.trim().equals("") && found){
 					//It exists, now add to it
 					cartList +="="+flightID+","+seats+","+cost+","+seatType;
 				} else {
@@ -80,22 +90,25 @@ public class ShoppingCart extends HttpServlet {
 					cartList =flightID+","+seats+","+cost+","+seatType;
 				}
 				
-				Cookie cCartList = new Cookie(userid + "LIST",cartList);
-				cCartList.setMaxAge(30 * 24 * 3600);
-				response.addCookie(cCartList);
+				
+				session.setAttribute(userid +"LIST", cartList);
+				session.setMaxInactiveInterval(30*60);
+				
 				response.getWriter().write("good");
 			} else {
 				response.getWriter().write("Already Added");
 			}
 		} else if(action.equals("get") ){
 			if(cartList.trim().equals("")){
-				request.setAttribute("flights", "");
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ShoppingCart.jsp");
+				//request.setAttribute("flights", "");
+				session.setAttribute("flights", "");
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ShoppingCart.jsp;jsessionid="+session.getId().toString());
 				rd.forward(request, response);
 			} else {
 				String jsonifiedFlights = GetShoppingCartFlights(cartList);
-				request.setAttribute("flights", jsonifiedFlights);
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ShoppingCart.jsp");
+				//request.setAttribute("flights", jsonifiedFlights);
+				session.setAttribute("flights", jsonifiedFlights);
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ShoppingCart.jsp;jsessionid="+session.getId().toString());
 				rd.forward(request, response);
 			}
 		}

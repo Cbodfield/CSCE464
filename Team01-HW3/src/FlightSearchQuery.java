@@ -12,10 +12,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 
 
@@ -85,9 +87,11 @@ public class FlightSearchQuery extends HttpServlet {
 				
 			}
 		}
-		request.setAttribute("flights", arr.toString());
+		//request.setAttribute("flights", arr.toString());
+		HttpSession session = request.getSession();
+		session.setAttribute("flights", arr.toString());
 		
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/FlightSearchResults.jsp");
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/FlightSearchResults.jsp;jsessionid="+session.getId());
 		rd.forward(request,response);
 	}
 	

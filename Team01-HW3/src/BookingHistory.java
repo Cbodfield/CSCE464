@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,8 +48,11 @@ public class BookingHistory extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		String userid = request.getSession().getAttribute("userid").toString();
 		
+		HttpSession session = request.getSession();
+		boolean isnew = session.isNew();
+		
+		String userid = request.getSession().getAttribute("userid").toString();
 		if (userid != null){
 			JSONArray output = LoadBookingHistoryDB(userid);
 			response.getWriter().write(output.toString());

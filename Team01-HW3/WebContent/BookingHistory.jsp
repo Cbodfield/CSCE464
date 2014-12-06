@@ -8,14 +8,18 @@
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
+	<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${empty sessionScope.client}">
+		<c:redirect url="Login.jsp"></c:redirect>
+	</c:if>
 	<script>
 	$( document ).ready(function() {
-		$.post('BookingHistory',
+		$.post('BookingHistory;jsessionid=${pageContext.session.id}',
 		{},
 		function(json) { 
                       if(json.indexOf("failed") >-1){
-                      	//fail
-                      	alert("Error");
+	                      	//fail
+	                      	alert("Error");
                      	} else {
                      		json = JSON.parse(json);
                      		var wehaverowsbaby=false;
@@ -49,7 +53,7 @@
 	function goToCart(){
 		//
 		var newForm = jQuery('<form>', {
-	        'action': 'ShoppingCart',
+	        'action': 'ShoppingCart;jsessionid=${pageContext.session.id}',
 	        'method':'POST',
 	    }).append(jQuery('<input>', {
 	        'name': 'action',
@@ -64,17 +68,6 @@
 </head>
 
 <body>
-<%
-String user = null;
-
-user = (String)session.getAttribute("user");
-
-if(user == null) {
-	response.sendRedirect("Login.jsp");
-}
-%>
-
-
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
@@ -95,8 +88,8 @@ if(user == null) {
 			</td></tr>
 			
 			<tr><td><hr/></td></tr>
-			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
-			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
+			<tr><td><button onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}';" class="nav_button">Flight Search</button></td></tr>
+			<tr><td><button onclick="location.href='BookingHistory.jsp;jsessionid=${pageContext.session.id}';"  class="nav_button">Booking History</button></td></tr>
 			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>	
 		</table>
 		
@@ -111,8 +104,10 @@ if(user == null) {
 </tr>
 </table>
 <script>
-var UserName= "<%=user %>"
-	ShowUsername(UserName);
+var Name = '<c:out value="${sessionScope.client.user.name}" />';
+var Organization = '<c:out value="${sessionScope.client.organization.name}" />';
+	ShowUsername(Name,Organization);
+	
 	
 	
 </script>

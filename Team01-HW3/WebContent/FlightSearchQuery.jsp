@@ -1,17 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Flight Search</title>
+	
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
 	<script src="Resources/JS/jquery-ui.js"></script>
 	<script src="Resources/JS/LoginAndRegistration"></script>
 	<link href="Resources/main.css" rel="stylesheet" type="text/css">
 	<link href="Resources/jquery-ui.structure.css" rel="stylesheet" type="text/css">
 	<link href="Resources/jquery-ui.theme.css" rel="stylesheet" type="text/css">
-	
+	<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+	<c:if test="${empty sessionScope.client}">
+		<c:redirect url="Login.jsp"></c:redirect>
+	</c:if>
 	<script>
 	$( document ).ready(function() {
 		var airports = ["ATL", "ANC", "AUS", "BWI", "BOS", "CLT", "MDW", "ORD", "CVG", "CLE", "CMH", "DFW", "DEN", "DTW", "FLL", "RSW", "BDL", "HNL", "IAH", "HOU", "IND", "MCI", "LAS", "LAX", "MEM", "MIA", "MSP", "BNA", "MSY", "JFK", "LGA", "EWR", "OAK", "ONT", "MCO", "PHL", "PHX", "PIT", "PDX", "RDU", "SMF", "SLC", "SAT", "SAN", "SFO", "SJC", "SNA", "SEA", "STL", "TPA", "IAD", "DCA"]; 
@@ -27,7 +30,7 @@
 	function goToCart(){
 		//
 		var newForm = jQuery('<form>', {
-	        'action': 'ShoppingCart',
+	        'action': 'ShoppingCart;jsessionid=${pageContext.session.id}',
 	        'method':'POST',
 	    }).append(jQuery('<input>', {
 	        'name': 'action',
@@ -40,15 +43,7 @@
 	</script>
 </head>
 <body>
-<%
-String user = null;
 
-user = (String)session.getAttribute("user");
-
-if(user == null) {
-	response.sendRedirect("Login.jsp");
-}
-%>
 <table id=global_table border=0>
 <tr>
 	<td id=navigation>
@@ -69,8 +64,8 @@ if(user == null) {
 			</td></tr>
 			
 			<tr><td><hr/></td></tr>
-			<tr><td><button onclick="location.href='FlightSearchQuery.jsp';" class="nav_button">Flight Search</button></td></tr>
-			<tr><td><button onclick="location.href='BookingHistory.jsp';"  class="nav_button">Booking History</button></td></tr>
+			<tr><td><button onclick="location.href='FlightSearchQuery.jsp;jsessionid=${pageContext.session.id}';" class="nav_button">Flight Search</button></td></tr>
+			<tr><td><button onclick="location.href='BookingHistory.jsp;jsessionid=${pageContext.session.id}';"  class="nav_button">Booking History</button></td></tr>
 			<tr><td><button class='nav_button'  onclick="goToCart()">Shopping Cart</button></td></tr>	
 		</table>
 		
@@ -78,7 +73,7 @@ if(user == null) {
 	<td id=content valign="top" align="middle">
 		<span id=welcome><h1>Welcome to FlightSearch.Com</h1></span>
 		<div>
-		<form action="FlightSearchQuery" method="POST">
+		<form action="FlightSearchQuery;jsessionid=${pageContext.session.id}" method="POST">
 			<table>
 				<tr>
 					<td>Source</td>
@@ -117,8 +112,9 @@ if(user == null) {
 </tr>
 </table>
 	<script>
-var UserName= "<%=user %>"
-	ShowUsername(UserName);
+var Name = '<c:out value="${sessionScope.client.user.name}" />';
+var Organization = '<c:out value="${sessionScope.client.organization.name}" />';
+	ShowUsername(Name,Organization);
 </script>
 </body>
 </html>

@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,12 +95,18 @@ public class ViewAndBook extends HttpServlet {
 					}
 				}
 				
-				request.setAttribute("flights", returnObj.toString());
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ConfirmBooking.jsp");
+				//request.setAttribute("flights", returnObj.toString());
+				HttpSession session = request.getSession();
+				session.setAttribute("flights", returnObj.toString());
+				session.setMaxInactiveInterval(30*60);
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/ConfirmBooking.jsp;jsessionid="+session.getId());
 				rd.forward(request, response);
 		} else {
-			request.setAttribute("flight", "");
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/ConfirmBooking.jsp");
+			//request.setAttribute("flights", "");
+			HttpSession session = request.getSession();
+			session.setAttribute("flights", "");
+			session.setMaxInactiveInterval(30*60);
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/ConfirmBooking.jsp;jsessionid="+session.getId());
 			rd.forward(request, response);
 		}
 		

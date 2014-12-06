@@ -45,14 +45,16 @@ public class Bank extends HttpServlet {
 		String accountid = request.getParameter("accountnumber");
 		String routingnumber = request.getParameter("routingnumber");
 		String sCost = request.getParameter("cost");
+		String sPin = request.getParameter("pin");
 		int nCost = -1;
 		Results results = new Results();
 		
 		ArrayList<Object> sqlParam = new ArrayList<Object>();
 		
-		if ((accountid != null) && (routingnumber != null) && (sCost != null)){
+		if ((accountid != null) && (routingnumber != null) && (sCost != null) && (sPin != null)){
 			sqlParam.add(accountid);
 			sqlParam.add(routingnumber);
+			sqlParam.add(sPin);
 			nCost = Integer.parseInt(sCost);
 			results = ConfirmAccountDB(sqlParam, nCost , request);
 		} else {
@@ -75,7 +77,7 @@ public class Bank extends HttpServlet {
 		Results results = new Results();
 		JDBCHelper jdbc = new JDBCHelper();
 		jdbc.connectToTeamDB();
-		String query = "SELECT balance FROM accounts WHERE account_id = ? AND routing_number = ?;";
+		String query = "SELECT balance FROM accounts WHERE account_id = ? AND routing_number = ? AND pin = ?;";
 
 		ResultSet accountResults = (ResultSet) jdbc.queryDB(query, sqlParam);
 		int nBalance = -1;
@@ -116,7 +118,7 @@ public class Bank extends HttpServlet {
 		JDBCHelper jdbc = new JDBCHelper();
 		jdbc.connectToTeamDB();
 		
-		String query = "UPDATE accounts SET balance = ? WHERE account_id = ?;";
+		String query = "UPDATE accounts SET balance = ? WHERE account_id = ? AND pin = ?;";
 				
 		int nRowsAffected = jdbc.updateDB(query, sqlParam);
 		jdbc.closeConnection();
