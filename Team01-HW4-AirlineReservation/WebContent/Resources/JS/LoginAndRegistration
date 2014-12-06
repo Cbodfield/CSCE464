@@ -1,0 +1,82 @@
+function login(){
+	var username = $("#username").val();
+	var password = $("#password").val();
+	var remember = $("#remember").is(":checked")
+	if(username.trim()=="" || password.trim()==""){
+	//error out
+	alert("Username and Password cannot be blank");
+	return;
+	}
+	$.post('Login',
+			{type:"login",user:username, pass:password, checked:remember},
+			function(data) { 
+                       if(data.indexOf("failed") >-1){
+                       	//fail
+                       	alert("Failed Login");
+                      	} else if (data.indexOf("invalid") >-1) {
+       					//Invalid characters inputted	
+       					alert("No invalid characters allowed. Please restrict your input to alphanumerics and special characters: ()-@&., */");
+                       	} else {
+                       		//success
+                      	 	window.location = data;
+                       }
+                                
+                    });
+}
+
+function register(){
+	var username = $("#1username").val();
+	var password = $("#1password").val();
+	var username2 = $("#dusername").val();
+	var password2 = $("#dpassword").val();
+	var orgname = $("#organization").val();
+	var orgaddress = $("#address").val();
+	var firstName = $("#firstName").val();
+	var lastName = $("#lastName").val();
+	if(username!=username2 || username.trim()=="" || username2.trim() == ""){
+	//error out
+	alert("Usernames cannot be blank and must match");
+	return;
+	}
+	if(password!=password2 || password.trim()=="" || password2.trim() == ""){
+	//error out
+	alert("Passwords cannot be blank and must match");
+	return;
+	}
+	if(firstName.trim()=="" || lastName.trim()==""){
+	//error out
+	alert("First and last name fields cannot be blank");
+	return;
+	}
+	
+	
+	$.post('Registration',{type:"register",user:username, pass:password, "organization":orgname, "address":orgaddress,"firstName":firstName,"lastName":lastName},function(data) { 
+      
+       if(data.indexOf("failed") >-1){
+       //bad registration
+       	alert("Registration has failed");
+       } else if (data.indexOf("invalid") >-1) {
+       //Invalid characters inputted	
+       	alert("No invalid characters allowed. Please restrict your input to alphanumerics and special characters: ()-@&., */");
+       } else {
+       //good registration
+       	window.location = data;
+       }
+                
+    });
+}
+
+function ShowUsername(name,organization){
+
+	$("#login_username").html("Welcome <b>" +name +"</b><br>"+organization+"<br><a style='width:150px' href='javascript:logout()'>Logout</a>");
+	
+}
+
+function logout(){
+
+	$.post('Login',{type:"logout"},function(data) { 
+                     
+                     window.location = data;
+                                
+                    });
+}
