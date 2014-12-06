@@ -22,7 +22,17 @@
 			});
 		$("#datepicker").datepicker();
 		$("#datepicker").datepicker("option","dateFormat","yy-mm-dd");
+			
+		$("#seats").on('input', function() {
+			var match = new RegExp(/^[0-9]*$/);
+			var bool = match.test($("#seats").val());
+			
+			if (!bool){
+				alert("Only numeric characters allowed");
+			}
+		});	
 	});
+
 	
 	function goToCart(){
 		//
@@ -37,6 +47,8 @@
 	    
 	    newForm.submit();
 	}
+	
+	
 	</script>
 </head>
 <body>

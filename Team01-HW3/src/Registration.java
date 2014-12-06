@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +19,7 @@ import classes.JDBCHelper;
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	String valid = "false";
-
+		
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -40,17 +41,60 @@ public class Registration extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// REGISTERING
-		valid = RegisterUser(request, response);
-		if (Boolean.valueOf(valid)) {
-			response.getWriter().write("Login.jsp");
-		} else {
-			// Failed login
-			// Set response content type
+		//Validate input (check whitelist)
+		if (!confirmWhitelistSaftey(request)){
 			response.setContentType("text/html");
-			response.getWriter().write("failed");
+			response.getWriter().write("invalid");
+		}else{
+			// REGISTERING
+			valid = RegisterUser(request, response);
+			if (Boolean.valueOf(valid)) {
+				response.getWriter().write("Login.jsp");
+			} else {
+				// Failed login
+				// Set response content type
+				response.setContentType("text/html");
+				response.getWriter().write("failed");
+			}		
 		}
 	}
+	
+	private final static Pattern VALID_TEXT_FIELD_PATTERN = Pattern.compile("[A-Za-z0-9-()@&\\.,\\s]*");
+	private boolean confirmWhitelistSaftey(HttpServletRequest request){
+		String username = request.getParameter( "user" );
+		String password = request.getParameter( "pass" );
+		String firstname = request.getParameter( "firstName" );
+		String lastname = request.getParameter( "lastName" );
+		String organization = request.getParameter( "organization" );
+		String address = request.getParameter( "address" );
+	
+ 		if ( !VALID_TEXT_FIELD_PATTERN.matcher(username).matches())  {
+ 			return false;
+ 		}
+
+ 		if ( !VALID_TEXT_FIELD_PATTERN.matcher(password).matches())  {
+ 			return false;
+ 		}
+	
+ 		if ( !VALID_TEXT_FIELD_PATTERN.matcher(firstname).matches())  {
+ 			return false;
+ 		}
+ 		
+ 		if ( !VALID_TEXT_FIELD_PATTERN.matcher(lastname).matches())  {
+ 			return false;
+ 		}
+ 		
+ 		if ( !VALID_TEXT_FIELD_PATTERN.matcher(organization).matches())  {
+ 			return false;
+ 		}
+
+ 		if ( !VALID_TEXT_FIELD_PATTERN.matcher(address).matches())  {
+ 			return false;
+ 		}
+	 		
+		return true;
+	}
+	
 
 	//TODO - switch to return as boolean
 	public String RegisterUser(HttpServletRequest req, HttpServletResponse res) {
@@ -104,12 +148,29 @@ public class Registration extends HttpServlet {
 		jdbc.connectToTeamDB();
 		
 		//String userid = GetUserID(sqlParam);
-		String query = "INSERT INTO accounts (holder_id, routing_number, balance) VALUES(?, ?, ?);";
+		String query = "INSERT INTO accounts (holder_id, routing_number, balance, pin) VALUES(?, ?, ?, ?);";
 
 		ArrayList<Object> sql = new ArrayList<Object>();
 		sql.add(userid);
 		sql.add((new Random()).nextInt(1000000));
 		sql.add((new Random()).nextInt(5000));
+		
+		StringBuilder pinNum = new StringBuilder();
+		int basePin = (new Random()).nextInt(9999) ;
+		if (basePin < 10){
+			pinNum.append("000");
+			pinNum.append(basePin);			
+		}else if (basePin < 100){
+			pinNum.append("00");
+			pinNum.append(basePin);
+		}else if (basePin < 1000){
+			pinNum.append("0");
+			pinNum.append(basePin);		
+		} else {
+			pinNum.append(basePin);
+		}
+		
+		sql.add(pinNum.toString());
 		
 		int returnedKey = jdbc.insertDB(query, sql);
 		jdbc.closeConnection();

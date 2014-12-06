@@ -16,6 +16,7 @@
 	function confirm_function(){
 		var accountnumber = $("#accountnumber").val();
 		var routingnumber = $("#routingnumber").val();
+		var pin = $("#pin").val();
 		var cost = $("#realcost").val();
 		if(good(cost) && good(routingnumber) && good(accountnumber)){
 		
@@ -27,7 +28,8 @@
             dataType: 'json',
             data:{"accountnumber":accountnumber,
 				 "routingnumber":routingnumber,
-				 "cost":cost},
+				 "cost":cost,
+				 "pin":pin},
             success: function (data) {
         		if(!data.bSuccess){
         			alert(data.sMessage);
@@ -153,9 +155,13 @@ String flights = String.valueOf(request.getAttribute("flights"));
 					<td><input id="accountnumber" type="text"></td>
 				</tr>
 				<tr>
+					<td>PIN</td>
+					<td><input id="pin" type="text"></td>
+				</tr>
+				<tr>
 					<td colspan='2'style="text-align:center"><button  class="nav_button" id="confirm" onclick="javascript:confirm_function();">Confirm</button></td>
 				</tr>
-							<tr>
+				<tr>
 					<td colspan='2' style="text-align:center"><button  class="nav_button"  onclick="location.href='FlightSearchQuery.jsp'">Cancel</button></td>
 				</tr>
 			</table>

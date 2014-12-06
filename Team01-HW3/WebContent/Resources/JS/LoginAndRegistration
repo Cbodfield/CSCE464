@@ -13,6 +13,10 @@ function login(){
                        if(data.indexOf("failed") >-1){
                        	//fail
                        	alert("Failed Login");
+                       	} else if (data.indexOf("invalid") >-1) {
+       					//Invalid characters inputted	
+       					alert("No invalid characters allowed. Please restrict your input to alphanumerics and special characters: ()-@&., */");
+                       	
                       	} else {
                        	//success
                       	 window.location = data;
@@ -50,6 +54,9 @@ function register(){
        if(data.indexOf("failed") >-1){
        //bad registration
        	alert("Registration has failed");
+       } else if (data.indexOf("invalid") >-1) {
+       //Invalid characters inputted	
+       	alert("No invalid characters allowed. Please restrict your input to alphanumerics and special characters: ()-@&., */");
        } else {
        //good registration
        	window.location = data;

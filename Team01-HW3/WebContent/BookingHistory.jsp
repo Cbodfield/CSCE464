@@ -3,6 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<%@ taglib prefix="c"
+ uri="http://java.sun.com/jstl/core_rt" %> 
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Booking History</title>
 	<script src="Resources/JS/jquery-1.11.1.min.js"></script>
